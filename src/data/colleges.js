@@ -1,5 +1,5 @@
 /**
- * College Data for CampusCompass
+ * College Data for Naviksha AI
  *
  * Logo sources:
  *   - Primary: Official website logos scraped from college sites.
