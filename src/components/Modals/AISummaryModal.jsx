@@ -1,6 +1,12 @@
 import React from 'react';
-import { X, ExternalLink, GraduationCap, DollarSign, TrendingUp, Users } from 'lucide-react';
+import { X, ExternalLink, GraduationCap, DollarSign, TrendingUp, Users, Award, BookOpen, Shield, Building2, Star, MapPin as MapPinIcon } from 'lucide-react';
 import { clsx } from 'clsx';
+
+const TYPE_COLORS = {
+    Government: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+    Private: 'bg-blue-100 text-blue-700 border-blue-200',
+    Deemed: 'bg-purple-100 text-purple-700 border-purple-200',
+};
 
 const AISummaryModal = ({ isOpen, onClose, colleges }) => {
     if (!isOpen) return null;
@@ -53,15 +59,35 @@ const AISummaryModal = ({ isOpen, onClose, colleges }) => {
                                     </div>
                                     <div>
                                         <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors">{college.name}</h3>
-                                        <p className="text-sm text-slate-500 flex items-center gap-2">
-                                            <span className="flex items-center gap-1"><MapPin size={14} /> {college.city}, {college.state}</span>
+                                        <div className="flex items-center gap-2 text-sm text-slate-500 mt-0.5 flex-wrap">
+                                            <span className="flex items-center gap-1"><MapPinIcon size={14} /> {college.city}, {college.state}</span>
                                             <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
                                             <span>Est. {college.year}</span>
-                                        </p>
+                                            {college.collegeType && (
+                                                <>
+                                                    <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
+                                                    <span className={clsx("px-2 py-0.5 rounded-full text-xs font-semibold border", TYPE_COLORS[college.collegeType])}>
+                                                        {college.collegeType}
+                                                    </span>
+                                                </>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div className="flex items-center gap-3">
+                                    {college.nirfRank && (
+                                        <div className="px-4 py-2 bg-amber-50 text-amber-700 rounded-lg flex flex-col items-center border border-amber-200">
+                                            <span className="text-xs font-semibold uppercase tracking-wider flex items-center gap-1"><Award size={12} /> NIRF</span>
+                                            <span className="text-lg font-bold">#{college.nirfRank}</span>
+                                        </div>
+                                    )}
+                                    {college.rating && (
+                                        <div className="px-4 py-2 bg-yellow-50 text-yellow-700 rounded-lg flex flex-col items-center border border-yellow-200">
+                                            <span className="text-xs font-semibold uppercase tracking-wider flex items-center gap-1"><Star size={12} /> Rating</span>
+                                            <span className="text-lg font-bold">{college.rating}/5</span>
+                                        </div>
+                                    )}
                                     <div className="px-4 py-2 bg-green-50 text-green-700 rounded-lg flex flex-col items-center border border-green-100">
                                         <span className="text-xs font-semibold uppercase tracking-wider">ROI Score</span>
                                         <span className="text-lg font-bold">{college.roi}%</span>
@@ -69,8 +95,8 @@ const AISummaryModal = ({ isOpen, onClose, colleges }) => {
                                 </div>
                             </div>
 
-                            {/* Stats Grid */}
-                            <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-100 border-b border-slate-100">
+                            {/* Placement Stats Grid */}
+                            <div className="grid grid-cols-2 md:grid-cols-5 divide-x divide-slate-100 border-b border-slate-100">
                                 <div className="p-4 flex flex-col items-center text-center">
                                     <span className="text-xs text-slate-500 uppercase font-semibold mb-1">Avg Package</span>
                                     <span className="text-lg font-bold text-slate-800">{college.avgPackage}</span>
@@ -79,14 +105,119 @@ const AISummaryModal = ({ isOpen, onClose, colleges }) => {
                                     <span className="text-xs text-slate-500 uppercase font-semibold mb-1">Highest</span>
                                     <span className="text-lg font-bold text-slate-800">{college.highestPackage}</span>
                                 </div>
+                                {college.medianPackage && (
+                                    <div className="p-4 flex flex-col items-center text-center">
+                                        <span className="text-xs text-slate-500 uppercase font-semibold mb-1">Median</span>
+                                        <span className="text-lg font-bold text-slate-800">{college.medianPackage}</span>
+                                    </div>
+                                )}
                                 <div className="p-4 flex flex-col items-center text-center">
                                     <span className="text-xs text-slate-500 uppercase font-semibold mb-1">Total Fees</span>
                                     <span className="text-lg font-bold text-slate-800">{college.fees.split(' ')[0]}</span>
                                 </div>
-                                <div className="p-4 flex flex-col items-center text-center">
-                                    <span className="text-xs text-slate-500 uppercase font-semibold mb-1">Alumni</span>
-                                    <span className="text-lg font-bold text-slate-800">{college.alumni}</span>
+                                {college.placementPercent && (
+                                    <div className="p-4 flex flex-col items-center text-center">
+                                        <span className="text-xs text-slate-500 uppercase font-semibold mb-1">Placed</span>
+                                        <span className="text-lg font-bold text-emerald-600">{college.placementPercent}%</span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Enhanced Info Sections */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 divide-x divide-slate-100 border-b border-slate-100">
+                                {/* Courses */}
+                                {college.courses && college.courses.length > 0 && (
+                                    <div className="p-4">
+                                        <h4 className="text-xs font-semibold text-slate-500 uppercase mb-2 flex items-center gap-1.5">
+                                            <BookOpen size={12} /> Courses Offered
+                                        </h4>
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {college.courses.map(c => (
+                                                <span key={c} className="px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-medium">{c}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Accreditation */}
+                                {college.accreditation && college.accreditation.length > 0 && (
+                                    <div className="p-4">
+                                        <h4 className="text-xs font-semibold text-slate-500 uppercase mb-2 flex items-center gap-1.5">
+                                            <Shield size={12} /> Accreditation
+                                        </h4>
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {college.accreditation.map(a => (
+                                                <span key={a} className="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-medium border border-emerald-100">{a}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Campus & Admissions */}
+                            <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-100 border-b border-slate-100">
+                                {college.campusArea && (
+                                    <div className="p-3 flex flex-col items-center text-center">
+                                        <span className="text-[10px] text-slate-500 uppercase font-semibold mb-0.5">Campus</span>
+                                        <span className="text-sm font-bold text-slate-700">{college.campusArea}</span>
+                                    </div>
+                                )}
+                                {college.hostelAvailable !== undefined && (
+                                    <div className="p-3 flex flex-col items-center text-center">
+                                        <span className="text-[10px] text-slate-500 uppercase font-semibold mb-0.5">Hostel</span>
+                                        <span className={clsx("text-sm font-bold", college.hostelAvailable ? 'text-emerald-600' : 'text-red-500')}>
+                                            {college.hostelAvailable ? '✓ Available' : '✗ N/A'}
+                                        </span>
+                                    </div>
+                                )}
+                                {college.studentFacultyRatio && (
+                                    <div className="p-3 flex flex-col items-center text-center">
+                                        <span className="text-[10px] text-slate-500 uppercase font-semibold mb-0.5">Student:Faculty</span>
+                                        <span className="text-sm font-bold text-slate-700">{college.studentFacultyRatio}</span>
+                                    </div>
+                                )}
+                                {college.totalSeats && (
+                                    <div className="p-3 flex flex-col items-center text-center">
+                                        <span className="text-[10px] text-slate-500 uppercase font-semibold mb-0.5">Total Seats</span>
+                                        <span className="text-sm font-bold text-slate-700">{college.totalSeats.toLocaleString()}</span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Top Recruiters */}
+                            {college.topRecruiters && college.topRecruiters.length > 0 && (
+                                <div className="p-4 border-b border-slate-100">
+                                    <h4 className="text-xs font-semibold text-slate-500 uppercase mb-2 flex items-center gap-1.5">
+                                        <Users size={12} /> Top Recruiters
+                                    </h4>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {college.topRecruiters.map(r => (
+                                            <span key={r} className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-medium">{r}</span>
+                                        ))}
+                                    </div>
                                 </div>
+                            )}
+
+                            {/* Admission & Scholarships Row */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 divide-x divide-slate-100 border-b border-slate-100">
+                                {college.entranceExams && college.entranceExams.length > 0 && (
+                                    <div className="p-4">
+                                        <h4 className="text-[10px] font-semibold text-slate-500 uppercase mb-1.5">Entrance Exams</h4>
+                                        <p className="text-sm text-slate-700 font-medium">{college.entranceExams.join(', ')}</p>
+                                    </div>
+                                )}
+                                {college.cutoff && (
+                                    <div className="p-4">
+                                        <h4 className="text-[10px] font-semibold text-slate-500 uppercase mb-1.5">Cutoff (Approx)</h4>
+                                        <p className="text-sm text-slate-700 font-medium">{college.cutoff}</p>
+                                    </div>
+                                )}
+                                {college.scholarships && (
+                                    <div className="p-4">
+                                        <h4 className="text-[10px] font-semibold text-slate-500 uppercase mb-1.5">Scholarships</h4>
+                                        <p className="text-sm text-slate-700 font-medium">{college.scholarships}</p>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Highlights & Action */}
