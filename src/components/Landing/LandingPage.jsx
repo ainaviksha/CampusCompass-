@@ -24,6 +24,7 @@ const FEATURES = [
         color: 'from-blue-500 to-cyan-400',
         bg: 'bg-blue-50',
         img: '/assets/feature-compare.png',
+        imgFit: 'contain',
     },
     {
         icon: Sparkles,
@@ -32,6 +33,7 @@ const FEATURES = [
         color: 'from-violet-500 to-purple-400',
         bg: 'bg-violet-50',
         img: '/assets/feature-ai.png',
+        imgFit: 'contain',
     },
     {
         icon: BarChart3,
@@ -325,8 +327,8 @@ const LandingPage = ({ onGetStarted }) => {
             </section>
 
             {/* ──── TRUST BAR ──── */}
-            <section className="border-y border-slate-100 bg-gradient-to-b from-slate-50/80 to-white py-8 overflow-hidden">
-                <p className="text-center text-[10px] text-slate-400 uppercase tracking-[0.2em] font-semibold mb-6">Trusted by students applying to</p>
+            <section className="border-y border-slate-100 bg-gradient-to-b from-slate-50/80 to-white py-5 sm:py-8 overflow-hidden">
+                <p className="text-center text-[10px] text-slate-400 uppercase tracking-[0.2em] font-semibold mb-4 sm:mb-6">Trusted by students applying to</p>
                 <div className="relative">
                     <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white to-transparent z-10"></div>
                     <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white to-transparent z-10"></div>
@@ -341,9 +343,9 @@ const LandingPage = ({ onGetStarted }) => {
             </section>
 
             {/* ──── FEATURES GRID ──── */}
-            <section id="features" className="py-20 md:py-28 px-6" ref={featRef}>
+            <section id="features" className="py-12 sm:py-20 md:py-28 px-4 sm:px-6" ref={featRef}>
                 <div className="max-w-6xl mx-auto">
-                    <div className="text-center mb-10 sm:mb-16">
+                    <div className="text-center mb-6 sm:mb-10 md:mb-16">
                         <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-semibold mb-4">
                             <Sparkles size={12} /> Features
                         </div>
@@ -351,11 +353,11 @@ const LandingPage = ({ onGetStarted }) => {
                         <p className="text-slate-500 max-w-xl mx-auto text-sm sm:text-lg">We remove the friction from college applications so you can focus on choosing the right future.</p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-6">
+                    <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
                         {FEATURES.map((feature, i) => (
                             <div
                                 key={i}
-                                className="group relative p-8 rounded-3xl border border-slate-100 bg-white hover:border-slate-200 transition-all duration-500 overflow-hidden"
+                                className="group relative p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-100 bg-white hover:border-slate-200 transition-all duration-500 overflow-hidden"
                                 style={{
                                     opacity: featInView ? 1 : 0,
                                     transform: featInView ? 'translateY(0)' : 'translateY(40px)',
@@ -365,16 +367,17 @@ const LandingPage = ({ onGetStarted }) => {
                                 {/* Gradient glow on hover */}
                                 <div className={`absolute top-0 right-0 w-40 h-40 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-10 rounded-full blur-3xl transition-opacity duration-500 -translate-y-10 translate-x-10`}></div>
 
-                                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                                    <feature.icon size={24} className="text-white" />
+                                <div className={`w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-3 sm:mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                                    <feature.icon size={18} className="text-white sm:hidden" />
+                                    <feature.icon size={24} className="text-white hidden sm:block" />
                                 </div>
-                                <h3 className="font-bold text-xl mb-3 text-slate-800 group-hover:text-slate-900 transition-colors">{feature.title}</h3>
-                                <p className="text-sm text-slate-500 leading-relaxed">{feature.desc}</p>
+                                <h3 className="font-bold text-base sm:text-xl mb-2 sm:mb-3 text-slate-800 group-hover:text-slate-900 transition-colors">{feature.title}</h3>
+                                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">{feature.desc}</p>
 
                                 {/* Feature image for cards that have one */}
                                 {feature.img && (
-                                    <div className="mt-5 -mx-2">
-                                        <img src={feature.img} alt={feature.title} className="w-full max-h-40 object-contain rounded-xl opacity-80 group-hover:opacity-100 transition-opacity" />
+                                    <div className="mt-3 sm:mt-5 -mx-1 sm:-mx-2">
+                                        <img src={feature.img} alt={feature.title} className={`w-full h-28 sm:h-40 ${feature.imgFit === 'contain' ? 'object-contain' : 'object-cover'} object-center rounded-lg sm:rounded-xl opacity-80 group-hover:opacity-100 transition-opacity`} />
                                     </div>
                                 )}
                             </div>
@@ -384,9 +387,9 @@ const LandingPage = ({ onGetStarted }) => {
             </section>
 
             {/* ──── HOW IT WORKS ──── */}
-            <section id="how-it-works" className="py-20 md:py-28 bg-gradient-to-b from-slate-50 to-white px-6" ref={howRef}>
+            <section id="how-it-works" className="py-12 sm:py-20 md:py-28 bg-gradient-to-b from-slate-50 to-white px-4 sm:px-6" ref={howRef}>
                 <div className="max-w-5xl mx-auto">
-                    <div className="text-center mb-10 sm:mb-16">
+                    <div className="text-center mb-6 sm:mb-10 md:mb-16">
                         <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-xs font-semibold mb-4">
                             <Zap size={12} /> Simple Process
                         </div>
@@ -394,7 +397,7 @@ const LandingPage = ({ onGetStarted }) => {
                         <p className="text-slate-500 max-w-lg mx-auto text-sm sm:text-lg">No accounts, no hassle. Just fill, select, and apply.</p>
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-6 sm:gap-8 relative">
+                    <div className="grid md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 relative">
                         {/* Connecting line */}
                         <div className="hidden md:block absolute top-16 left-[20%] right-[20%] h-0.5 bg-gradient-to-r from-blue-200 via-indigo-200 to-violet-200"></div>
 
@@ -422,9 +425,9 @@ const LandingPage = ({ onGetStarted }) => {
             </section>
 
             {/* ──── TESTIMONIALS ──── */}
-            <section id="testimonials" className="py-20 md:py-28 px-6" ref={testRef}>
+            <section id="testimonials" className="py-12 sm:py-20 md:py-28 px-4 sm:px-6" ref={testRef}>
                 <div className="max-w-5xl mx-auto">
-                    <div className="text-center mb-10 sm:mb-16">
+                    <div className="text-center mb-6 sm:mb-10 md:mb-16">
                         <div className="inline-flex items-center gap-2 bg-amber-50 text-amber-600 px-3 py-1 rounded-full text-xs font-semibold mb-4">
                             <Star size={12} /> Testimonials
                         </div>
@@ -432,23 +435,23 @@ const LandingPage = ({ onGetStarted }) => {
                         <p className="text-slate-500 max-w-lg mx-auto text-sm sm:text-lg">Here's what students who used the platform have to say.</p>
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-6">
+                    <div className="grid md:grid-cols-3 gap-4 sm:gap-6">
                         {TESTIMONIALS.map((t, i) => (
                             <div
                                 key={i}
-                                className="p-6 rounded-2xl bg-gradient-to-br from-white to-slate-50 border border-slate-100 hover:shadow-xl hover:shadow-slate-100/50 transition-all duration-300"
+                                className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gradient-to-br from-white to-slate-50 border border-slate-100 hover:shadow-xl hover:shadow-slate-100/50 transition-all duration-300"
                                 style={{
                                     opacity: testInView ? 1 : 0,
                                     transform: testInView ? 'translateY(0)' : 'translateY(30px)',
                                     transition: `all 0.6s cubic-bezier(0.16,1,0.3,1) ${i * 0.12}s`
                                 }}
                             >
-                                <div className="flex gap-0.5 mb-4">
+                                <div className="flex gap-0.5 mb-3 sm:mb-4">
                                     {Array.from({ length: t.rating }).map((_, j) => (
-                                        <Star key={j} size={14} className="text-amber-400 fill-amber-400" />
+                                        <Star key={j} size={13} className="text-amber-400 fill-amber-400" />
                                     ))}
                                 </div>
-                                <p className="text-sm text-slate-600 leading-relaxed mb-5 italic">"{t.text}"</p>
+                                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4 sm:mb-5 italic">"{t.text}"</p>
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold text-sm">
                                         {t.name.split(' ').map(w => w[0]).join('')}
@@ -508,7 +511,7 @@ const LandingPage = ({ onGetStarted }) => {
             </section>
 
             {/* ──── FOOTER ──── */}
-            <footer className="border-t border-slate-100 bg-slate-50 py-10 px-6">
+            <footer className="border-t border-slate-100 bg-slate-50 py-6 sm:py-10 px-4 sm:px-6">
                 <div className="max-w-6xl mx-auto">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                         <div className="flex items-center gap-2.5">
