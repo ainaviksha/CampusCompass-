@@ -144,10 +144,10 @@ const LandingPage = ({ onGetStarted }) => {
 
             {/* ──── NAVBAR ──── */}
             <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrollY > 50 ? 'bg-white/90 backdrop-blur-xl shadow-lg shadow-slate-100/50 border-b border-slate-100' : 'bg-transparent'}`}>
-                <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                        <img src="/logo.png" alt="Naviksha AI" className="w-9 h-9 rounded-lg" />
-                        <span className="font-extrabold text-lg tracking-tight">Naviksha AI</span>
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <img src="/logo.png" alt="Naviksha AI" className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg" />
+                        <span className="font-extrabold text-base sm:text-lg tracking-tight">Naviksha AI</span>
                     </div>
                     <div className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-500">
                         <a href="#features" className="hover:text-slate-900 transition-colors">Features</a>
@@ -156,7 +156,7 @@ const LandingPage = ({ onGetStarted }) => {
                     </div>
                     <button
                         onClick={onGetStarted}
-                        className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm font-bold rounded-full transition-all shadow-md shadow-blue-200/50 hover:shadow-lg hover:shadow-blue-300/50 active:scale-[0.97] flex items-center gap-1.5"
+                        className="px-3.5 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs sm:text-sm font-bold rounded-full transition-all shadow-md shadow-blue-200/50 hover:shadow-lg hover:shadow-blue-300/50 active:scale-[0.97] flex items-center gap-1.5"
                     >
                         Get Started <ArrowRight size={14} />
                     </button>
@@ -164,7 +164,7 @@ const LandingPage = ({ onGetStarted }) => {
             </nav>
 
             {/* ──── HERO SECTION ──── */}
-            <section className="relative pt-28 pb-16 md:pt-40 md:pb-24 px-6">
+            <section className="relative pt-24 pb-12 md:pt-40 md:pb-24 px-4 sm:px-6">
                 {/* Animated Background Elements */}
                 <div className="absolute inset-0 overflow-hidden -z-10">
                     <div className="absolute top-16 left-[10%] w-[500px] h-[500px] bg-gradient-to-br from-blue-100/80 to-indigo-100/60 rounded-full blur-3xl" style={{ transform: `translateY(${scrollY * 0.08}px)` }}></div>
@@ -179,19 +179,19 @@ const LandingPage = ({ onGetStarted }) => {
                         {/* Left: Copy */}
                         <div className="text-center md:text-left">
                             {/* Badge */}
-                            <div className="flex flex-wrap items-center gap-3 mb-8 animate-[fadeInDown_0.6s_ease]">
-                                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/60 text-blue-700 px-4 py-1.5 rounded-full text-xs font-semibold">
+                            <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-3 mb-6 sm:mb-8 animate-[fadeInDown_0.6s_ease]">
+                                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/60 text-blue-700 px-3 sm:px-4 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold">
                                     <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
                                     Admissions 2025-26 Open
                                 </div>
-                                <div className="inline-flex items-center gap-1.5 bg-slate-900/5 border border-slate-200/60 text-slate-500 px-3 py-1 rounded-full text-[11px] font-medium">
-                                    <Sparkles size={12} className="text-indigo-500" />
+                                <div className="inline-flex items-center gap-1.5 bg-slate-900/5 border border-slate-200/60 text-slate-500 px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-medium">
+                                    <Sparkles size={11} className="text-indigo-500" />
                                     Powered by Naviksha AI
                                 </div>
                             </div>
 
                             {/* Main headline */}
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.08] tracking-tight mb-6 animate-[fadeInUp_0.8s_ease]">
+                            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.08] tracking-tight mb-4 sm:mb-6 animate-[fadeInUp_0.8s_ease]">
                                 One Form,
                                 <br />
                                 <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">
@@ -200,31 +200,31 @@ const LandingPage = ({ onGetStarted }) => {
                             </h1>
 
                             {/* Subheadline */}
-                            <p className="text-base md:text-lg text-slate-500 max-w-lg mx-auto md:mx-0 mb-8 leading-relaxed animate-[fadeInUp_1s_ease]">
+                            <p className="text-sm sm:text-base md:text-lg text-slate-500 max-w-lg mx-auto md:mx-0 mb-6 sm:mb-8 leading-relaxed animate-[fadeInUp_1s_ease]">
                                 Stop filling repetitive applications. Submit once, apply everywhere — colleges curated to match <strong className="text-slate-700">your marks, preferences & achievements</strong>.
                             </p>
 
                             {/* CTA Group */}
-                            <div className="flex flex-col sm:flex-row items-center md:items-start gap-4 mb-10 animate-[fadeInUp_1.2s_ease]">
+                            <div className="flex flex-col sm:flex-row items-center md:items-start gap-3 sm:gap-4 mb-8 sm:mb-10 animate-[fadeInUp_1.2s_ease]">
                                 <button
                                     onClick={onGetStarted}
-                                    className="group w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-2xl shadow-xl shadow-blue-200/60 transition-all active:scale-[0.97] flex items-center justify-center gap-2 text-lg hover:shadow-2xl hover:shadow-blue-300/50"
+                                    className="group w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-2xl shadow-xl shadow-blue-200/60 transition-all active:scale-[0.97] flex items-center justify-center gap-2 text-base sm:text-lg hover:shadow-2xl hover:shadow-blue-300/50"
                                 >
                                     Start Your Application
-                                    <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+                                    <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                                 </button>
-                                <span className="text-sm text-slate-400 flex items-center gap-1.5">
+                                <span className="text-xs sm:text-sm text-slate-400 flex items-center gap-1.5">
                                     <CheckCircle size={14} className="text-green-500" />
                                     2 min • No login required
                                 </span>
                             </div>
 
                             {/* Stats Row */}
-                            <div className="flex items-center justify-center md:justify-start gap-8 animate-[fadeInUp_1.4s_ease]">
+                            <div className="grid grid-cols-4 gap-3 sm:gap-6 md:gap-8 animate-[fadeInUp_1.4s_ease]">
                                 {STATS.map((stat) => (
                                     <div key={stat.label} className="text-center md:text-left">
-                                        <p className="text-2xl md:text-3xl font-black text-slate-900">{stat.value}</p>
-                                        <p className="text-xs text-slate-400 font-medium mt-0.5">{stat.label}</p>
+                                        <p className="text-lg sm:text-2xl md:text-3xl font-black text-slate-900">{stat.value}</p>
+                                        <p className="text-[10px] sm:text-xs text-slate-400 font-medium mt-0.5">{stat.label}</p>
                                     </div>
                                 ))}
                             </div>
@@ -343,12 +343,12 @@ const LandingPage = ({ onGetStarted }) => {
             {/* ──── FEATURES GRID ──── */}
             <section id="features" className="py-20 md:py-28 px-6" ref={featRef}>
                 <div className="max-w-6xl mx-auto">
-                    <div className="text-center mb-16">
+                    <div className="text-center mb-10 sm:mb-16">
                         <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-semibold mb-4">
                             <Sparkles size={12} /> Features
                         </div>
-                        <h2 className="text-3xl md:text-5xl font-black tracking-tight mb-4">Master Engineering Application Form</h2>
-                        <p className="text-slate-500 max-w-xl mx-auto text-lg">We remove the friction from college applications so you can focus on choosing the right future.</p>
+                        <h2 className="text-2xl sm:text-3xl md:text-5xl font-black tracking-tight mb-3 sm:mb-4">Master Engineering Application Form</h2>
+                        <p className="text-slate-500 max-w-xl mx-auto text-sm sm:text-lg">We remove the friction from college applications so you can focus on choosing the right future.</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-6">
@@ -386,15 +386,15 @@ const LandingPage = ({ onGetStarted }) => {
             {/* ──── HOW IT WORKS ──── */}
             <section id="how-it-works" className="py-20 md:py-28 bg-gradient-to-b from-slate-50 to-white px-6" ref={howRef}>
                 <div className="max-w-5xl mx-auto">
-                    <div className="text-center mb-16">
+                    <div className="text-center mb-10 sm:mb-16">
                         <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-xs font-semibold mb-4">
                             <Zap size={12} /> Simple Process
                         </div>
-                        <h2 className="text-3xl md:text-5xl font-black tracking-tight mb-4">3 Steps to Your Dream College</h2>
-                        <p className="text-slate-500 max-w-lg mx-auto text-lg">No accounts, no hassle. Just fill, select, and apply.</p>
+                        <h2 className="text-2xl sm:text-3xl md:text-5xl font-black tracking-tight mb-3 sm:mb-4">3 Steps to Your Dream College</h2>
+                        <p className="text-slate-500 max-w-lg mx-auto text-sm sm:text-lg">No accounts, no hassle. Just fill, select, and apply.</p>
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-8 relative">
+                    <div className="grid md:grid-cols-3 gap-6 sm:gap-8 relative">
                         {/* Connecting line */}
                         <div className="hidden md:block absolute top-16 left-[20%] right-[20%] h-0.5 bg-gradient-to-r from-blue-200 via-indigo-200 to-violet-200"></div>
 
@@ -408,12 +408,13 @@ const LandingPage = ({ onGetStarted }) => {
                                     transition: `all 0.6s cubic-bezier(0.16,1,0.3,1) ${i * 0.15}s`
                                 }}
                             >
-                                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center mx-auto mb-5 shadow-lg shadow-blue-200/50 relative z-10">
-                                    <item.icon size={24} className="text-white" />
+                                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center mx-auto mb-3 sm:mb-5 shadow-lg shadow-blue-200/50 relative z-10">
+                                    <item.icon size={20} className="text-white sm:hidden" />
+                                    <item.icon size={24} className="text-white hidden sm:block" />
                                 </div>
-                                <div className="text-5xl font-black bg-gradient-to-b from-slate-200 to-slate-100 bg-clip-text text-transparent mb-3">{item.step}</div>
-                                <h3 className="font-bold text-lg mb-2 text-slate-800">{item.title}</h3>
-                                <p className="text-sm text-slate-500 leading-relaxed max-w-xs mx-auto">{item.desc}</p>
+                                <div className="text-3xl sm:text-5xl font-black bg-gradient-to-b from-slate-200 to-slate-100 bg-clip-text text-transparent mb-2 sm:mb-3">{item.step}</div>
+                                <h3 className="font-bold text-base sm:text-lg mb-1.5 sm:mb-2 text-slate-800">{item.title}</h3>
+                                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-xs mx-auto">{item.desc}</p>
                             </div>
                         ))}
                     </div>
@@ -423,12 +424,12 @@ const LandingPage = ({ onGetStarted }) => {
             {/* ──── TESTIMONIALS ──── */}
             <section id="testimonials" className="py-20 md:py-28 px-6" ref={testRef}>
                 <div className="max-w-5xl mx-auto">
-                    <div className="text-center mb-16">
+                    <div className="text-center mb-10 sm:mb-16">
                         <div className="inline-flex items-center gap-2 bg-amber-50 text-amber-600 px-3 py-1 rounded-full text-xs font-semibold mb-4">
                             <Star size={12} /> Testimonials
                         </div>
-                        <h2 className="text-3xl md:text-5xl font-black tracking-tight mb-4">Students Love Naviksha AI</h2>
-                        <p className="text-slate-500 max-w-lg mx-auto text-lg">Here's what students who used the platform have to say.</p>
+                        <h2 className="text-2xl sm:text-3xl md:text-5xl font-black tracking-tight mb-3 sm:mb-4">Students Love Naviksha AI</h2>
+                        <p className="text-slate-500 max-w-lg mx-auto text-sm sm:text-lg">Here's what students who used the platform have to say.</p>
                     </div>
 
                     <div className="grid md:grid-cols-3 gap-6">
@@ -464,10 +465,10 @@ const LandingPage = ({ onGetStarted }) => {
             </section>
 
             {/* ──── DATA HIGHLIGHT ──── */}
-            <section className="py-16 px-6 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 relative overflow-hidden">
+            <section className="py-10 sm:py-16 px-4 sm:px-6 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 relative overflow-hidden">
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px]"></div>
                 <div className="max-w-5xl mx-auto relative z-10">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 text-center text-white">
                         {[
                             { val: '25+', label: 'NIRF Ranked Colleges' },
                             { val: '30+', label: 'Data Points Per College' },
@@ -475,8 +476,8 @@ const LandingPage = ({ onGetStarted }) => {
                             { val: '₹21L', label: 'Avg Package' },
                         ].map((d, i) => (
                             <div key={i}>
-                                <p className="text-3xl md:text-4xl font-black mb-1">{d.val}</p>
-                                <p className="text-sm text-white/70 font-medium">{d.label}</p>
+                                <p className="text-2xl sm:text-3xl md:text-4xl font-black mb-1">{d.val}</p>
+                                <p className="text-xs sm:text-sm text-white/70 font-medium">{d.label}</p>
                             </div>
                         ))}
                     </div>
@@ -484,22 +485,22 @@ const LandingPage = ({ onGetStarted }) => {
             </section>
 
             {/* ──── FINAL CTA ──── */}
-            <section className="py-24 md:py-32 px-6 relative">
+            <section className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 relative">
                 <div className="absolute inset-0 overflow-hidden -z-10">
                     <div className="absolute bottom-0 left-[30%] w-[400px] h-[400px] bg-gradient-to-br from-blue-50/60 to-indigo-50/40 rounded-full blur-3xl"></div>
                 </div>
                 <div className="max-w-3xl mx-auto text-center">
-                    <img src="/logo.png" alt="Naviksha AI" className="w-14 h-14 rounded-2xl mx-auto" />
-                    <h2 className="text-3xl md:text-5xl font-black tracking-tight mt-6 mb-4">Ready to find your campus?</h2>
-                    <p className="text-lg text-slate-500 mb-8 max-w-md mx-auto">Join thousands of students who simplified their admission journey with data-driven decisions.</p>
+                    <img src="/logo.png" alt="Naviksha AI" className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl mx-auto" />
+                    <h2 className="text-2xl sm:text-3xl md:text-5xl font-black tracking-tight mt-4 sm:mt-6 mb-3 sm:mb-4">Ready to find your campus?</h2>
+                    <p className="text-sm sm:text-lg text-slate-500 mb-6 sm:mb-8 max-w-md mx-auto">Join thousands of students who simplified their admission journey with data-driven decisions.</p>
                     <button
                         onClick={onGetStarted}
-                        className="group px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-2xl shadow-xl shadow-blue-200/50 transition-all active:scale-[0.97] flex items-center justify-center gap-2 mx-auto text-lg hover:shadow-2xl"
+                        className="group px-6 sm:px-10 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-2xl shadow-xl shadow-blue-200/50 transition-all active:scale-[0.97] flex items-center justify-center gap-2 mx-auto text-base sm:text-lg hover:shadow-2xl"
                     >
                         Start Now
-                        <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                     </button>
-                    <p className="mt-4 text-xs text-slate-400 flex items-center justify-center gap-1.5">
+                    <p className="mt-3 sm:mt-4 text-[11px] sm:text-xs text-slate-400 flex items-center justify-center gap-1.5">
                         <CheckCircle size={12} className="text-green-500" />
                         No login required • Takes 2 minutes
                     </p>

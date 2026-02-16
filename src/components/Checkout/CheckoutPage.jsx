@@ -21,10 +21,10 @@ const CheckoutPage = ({ colleges, onBack, onPaymentComplete }) => {
 
     return (
         <div className="min-h-screen bg-slate-50">
-            <div className="max-w-2xl mx-auto py-8 px-4">
+            <div className="max-w-2xl mx-auto py-6 sm:py-8 px-3 sm:px-4">
 
                 {/* Page Header */}
-                <div className="mb-6">
+                <div className="mb-4 sm:mb-6">
                     <button
                         onClick={onBack}
                         className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-700 transition-colors mb-3"
@@ -32,34 +32,34 @@ const CheckoutPage = ({ colleges, onBack, onPaymentComplete }) => {
                         <ArrowLeft size={14} />
                         Back to College Selection
                     </button>
-                    <h1 className="text-2xl font-bold text-slate-900">Complete Your Application</h1>
-                    <p className="text-sm text-slate-500 mt-0.5">Review your selected colleges and proceed to payment</p>
+                    <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Complete Your Application</h1>
+                    <p className="text-xs sm:text-sm text-slate-500 mt-0.5">Review your selected colleges and proceed to payment</p>
                 </div>
 
                 {/* Selected Colleges Card */}
-                <div className="bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden mb-5">
-                    <div className="px-5 py-3 bg-slate-50 border-b border-slate-100">
+                <div className="bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden mb-4 sm:mb-5">
+                    <div className="px-3.5 sm:px-5 py-2.5 sm:py-3 bg-slate-50 border-b border-slate-100">
                         <h2 className="text-sm font-bold text-slate-800">Selected Colleges ({colleges.length})</h2>
                     </div>
                     <div className="divide-y divide-slate-100 max-h-[350px] overflow-y-auto">
                         {colleges.map((college, idx) => (
-                            <div key={college.id} className="flex items-center justify-between px-5 py-3 hover:bg-slate-50/50 transition-colors">
-                                <div className="flex items-center gap-3">
-                                    <span className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-[10px] font-bold text-blue-600">{idx + 1}</span>
-                                    <div>
-                                        <div className="text-sm font-semibold text-slate-900">{college.name}</div>
-                                        <div className="text-xs text-slate-500">{college.city || college.location}</div>
+                            <div key={college.id} className="flex items-center justify-between px-3.5 sm:px-5 py-2.5 sm:py-3 hover:bg-slate-50/50 transition-colors gap-2">
+                                <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                                    <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-100 flex items-center justify-center text-[9px] sm:text-[10px] font-bold text-blue-600 flex-shrink-0">{idx + 1}</span>
+                                    <div className="min-w-0">
+                                        <div className="text-xs sm:text-sm font-semibold text-slate-900 truncate">{college.name}</div>
+                                        <div className="text-[10px] sm:text-xs text-slate-500 truncate">{college.city || college.location}</div>
                                     </div>
                                 </div>
-                                <span className="text-sm font-semibold text-slate-700">₹{APP_FEE}</span>
+                                <span className="text-xs sm:text-sm font-semibold text-slate-700 flex-shrink-0">₹{APP_FEE}</span>
                             </div>
                         ))}
                     </div>
                 </div>
 
                 {/* Pricing Card */}
-                <div className="bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden mb-5">
-                    <div className="p-5 space-y-2">
+                <div className="bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden mb-4 sm:mb-5">
+                    <div className="p-3.5 sm:p-5 space-y-2">
                         <div className="flex justify-between text-xs text-slate-500">
                             <span>Subtotal ({colleges.length} {colleges.length === 1 ? 'application' : 'applications'})</span>
                             <span>₹{totalFee.toLocaleString()}</span>
@@ -70,7 +70,7 @@ const CheckoutPage = ({ colleges, onBack, onPaymentComplete }) => {
                                 <span>- ₹{discountAmount.toLocaleString()}</span>
                             </div>
                         )}
-                        <div className="flex justify-between text-lg font-bold text-slate-900 pt-3 border-t border-slate-200">
+                        <div className="flex justify-between text-base sm:text-lg font-bold text-slate-900 pt-3 border-t border-slate-200">
                             <span>Total Amount</span>
                             <span>₹{finalAmount.toLocaleString()}</span>
                         </div>
@@ -94,7 +94,7 @@ const CheckoutPage = ({ colleges, onBack, onPaymentComplete }) => {
                 </button>
 
                 {/* Trust Badges */}
-                <div className="flex items-center justify-center gap-5 mt-4 text-xs text-slate-500">
+                <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-5 mt-4 text-[10px] sm:text-xs text-slate-500">
                     <div className="flex items-center gap-1.5">
                         <Check size={14} className="text-green-500" />
                         <span>Secure Payment</span>
