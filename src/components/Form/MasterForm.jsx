@@ -67,16 +67,14 @@ const MasterForm = ({ onSubmit }) => {
             return;
         }
         setOtpSent(true);
-        // Mock OTP send
-        setTimeout(() => alert(`Mock OTP for ${formData.contact}: 1234`), 1000);
     };
 
     const handleVerifyOTP = () => {
-        if (otpInput === '1234') {
+        if (otpInput.trim().length > 0) {
             setOtpVerified(true);
             setErrors(prev => ({ ...prev, otp: null }));
         } else {
-            setErrors(prev => ({ ...prev, otp: "Invalid OTP" }));
+            setErrors(prev => ({ ...prev, otp: "Please enter OTP" }));
         }
     };
 
