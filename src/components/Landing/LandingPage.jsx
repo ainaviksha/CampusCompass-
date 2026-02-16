@@ -4,9 +4,10 @@ import { ArrowRight, CheckCircle, Sparkles, GraduationCap, TrendingUp, Shield, Z
 /* ────────────────────── DATA ────────────────────── */
 
 const STATS = [
-    { label: 'Partner Colleges', value: '120+', icon: GraduationCap },
-    { label: 'Students Placed', value: '50K+', icon: Users },
-    { label: 'Avg ROI', value: '220%', icon: TrendingUp },
+    { label: 'Colleges', value: '120+', icon: GraduationCap },
+    { label: 'Departments', value: '12+', icon: BarChart3 },
+    { label: 'Application', value: '1', icon: Zap },
+    { label: 'Students', value: '20,000+', icon: Users },
 ];
 
 const TRUST_LOGOS = [
@@ -346,7 +347,7 @@ const LandingPage = ({ onGetStarted }) => {
                         <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-semibold mb-4">
                             <Sparkles size={12} /> Features
                         </div>
-                        <h2 className="text-3xl md:text-5xl font-black tracking-tight mb-4">Why Naviksha AI?</h2>
+                        <h2 className="text-3xl md:text-5xl font-black tracking-tight mb-4">Master Engineering Application Form</h2>
                         <p className="text-slate-500 max-w-xl mx-auto text-lg">We remove the friction from college applications so you can focus on choosing the right future.</p>
                     </div>
 
