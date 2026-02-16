@@ -4,21 +4,21 @@ import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 const InputField = ({ label, error, ...props }) => (
-    <div className="space-y-1">
-        <label className="block text-sm font-medium text-slate-700">{label}</label>
+    <div className="space-y-0.5">
+        <label className="block text-xs font-medium text-slate-600">{label}</label>
         <div className="relative">
             <input
                 className={twMerge(
-                    "w-full px-4 py-3 rounded-xl border-2 transition-all duration-200 outline-none",
+                    "w-full px-3 py-2 rounded-lg border text-sm transition-all duration-200 outline-none",
                     error
                         ? "border-red-300 bg-red-50 focus:border-red-500"
-                        : "border-slate-200 bg-white focus:border-blue-500 focus:shadow-md focus:shadow-blue-100"
+                        : "border-slate-200 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 )}
                 {...props}
             />
-            {error && <AlertCircle size={18} className="absolute right-3 top-3.5 text-red-500" />}
+            {error && <AlertCircle size={14} className="absolute right-2.5 top-2.5 text-red-500" />}
         </div>
-        {error && <p className="text-xs text-red-500 font-medium ml-1">{error}</p>}
+        {error && <p className="text-[11px] text-red-500 font-medium ml-0.5">{error}</p>}
     </div>
 );
 
@@ -53,7 +53,7 @@ const MasterForm = ({ onSubmit }) => {
         if (!formData.studentName.trim()) newErrors.studentName = "Student Name is required";
         if (!formData.parentName.trim()) newErrors.parentName = "Parent Name is required";
         if (!formData.contact.match(/^\d{10}$/)) newErrors.contact = "Valid 10-digit number required";
-        if (!formData.jeeNotAppeared && (!formData.jeePercentile || formData.jeePercentile < 0 || formData.jeePercentile > 100)) {
+        if (!formData.jeePercentile || formData.jeePercentile < 0 || formData.jeePercentile > 100) {
             newErrors.jeePercentile = "Valid JEE Percentile (0-100) required";
         }
 
@@ -91,31 +91,31 @@ const MasterForm = ({ onSubmit }) => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+        <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
             {/* Header Banner */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-8 text-white relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -translate-y-1/2 translate-x-1/3"></div>
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-5 py-4 text-white relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-white opacity-5 rounded-full -translate-y-1/2 translate-x-1/3"></div>
                 <div className="relative z-10">
-                    <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold mb-3 border border-white/20">
-                        <Sparkles size={14} className="text-yellow-300" />
-                        <span>Single Application Form</span>
+                    <div className="inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[10px] font-semibold mb-2 border border-white/20">
+                        <Sparkles size={11} className="text-yellow-300" />
+                        <span>India's Smartest Application Platform</span>
                     </div>
-                    <h1 className="text-3xl font-bold mb-2">CampusCompass</h1>
-                    <p className="text-blue-100 max-w-xl">Guiding you to the right campus. Apply to 120+ top engineering colleges with a single form — curated based on your percentiles & achievements.</p>
+                    <h1 className="text-xl font-bold mb-1">Master Engineering Application Form</h1>
+                    <p className="text-blue-100 text-xs max-w-xl">Single form to apply to 120+ curated colleges based on your marks & achievements</p>
                 </div>
             </div>
 
-            <div className="p-8 space-y-8">
+            <div className="p-5 space-y-5">
                 {/* Section 1: Personal Details */}
                 <section>
-                    <div className="flex items-center gap-2 mb-4 text-slate-800">
-                        <div className="p-2 bg-blue-100 rounded-lg text-blue-600">
-                            <Target size={20} />
+                    <div className="flex items-center gap-2 mb-3 text-slate-800">
+                        <div className="p-1.5 bg-blue-100 rounded-md text-blue-600">
+                            <Target size={16} />
                         </div>
-                        <h3 className="text-lg font-bold">Personal & Contact Details</h3>
+                        <h3 className="text-sm font-bold">Personal & Contact Details</h3>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-5">
+                    <div className="grid md:grid-cols-2 gap-3">
                         <InputField
                             label="Student Name"
                             placeholder="Enter full name"
@@ -132,29 +132,29 @@ const MasterForm = ({ onSubmit }) => {
                         />
                     </div>
 
-                    <div className="mt-5">
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Contact Number</label>
-                        <div className="flex gap-3">
+                    <div className="mt-3">
+                        <label className="block text-xs font-medium text-slate-600 mb-0.5">Contact Number</label>
+                        <div className="flex gap-2">
                             <div className="flex-1 relative">
                                 <input
                                     type="tel"
                                     placeholder="10-digit mobile number"
                                     className={twMerge(
-                                        "w-full px-4 py-3 rounded-xl border-2 outline-none transition-all",
-                                        errors.contact ? "border-red-300 bg-red-50" : "border-slate-200 focus:border-blue-500"
+                                        "w-full px-3 py-2 rounded-lg border text-sm outline-none transition-all",
+                                        errors.contact ? "border-red-300 bg-red-50" : "border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                                     )}
                                     value={formData.contact}
                                     onChange={e => setFormData({ ...formData, contact: e.target.value })}
                                     disabled={otpVerified}
                                 />
-                                {otpVerified && <Check size={20} className="absolute right-3 top-3.5 text-green-500" />}
+                                {otpVerified && <Check size={16} className="absolute right-2.5 top-2.5 text-green-500" />}
                             </div>
 
                             {!otpVerified ? (
                                 !otpSent ? (
                                     <button
                                         onClick={handleSendOTP}
-                                        className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors whitespace-nowrap"
+                                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors whitespace-nowrap"
                                     >
                                         Verify OTP
                                     </button>
@@ -163,21 +163,21 @@ const MasterForm = ({ onSubmit }) => {
                                         <input
                                             type="text"
                                             placeholder="OTP"
-                                            className="w-24 px-3 py-3 rounded-xl border-2 border-slate-200 outline-none focus:border-blue-500 text-center tracking-widest"
+                                            className="w-20 px-2 py-2 rounded-lg border border-slate-200 outline-none focus:border-blue-500 text-sm text-center tracking-widest"
                                             maxLength={4}
                                             value={otpInput}
                                             onChange={e => setOtpInput(e.target.value)}
                                         />
                                         <button
                                             onClick={handleVerifyOTP}
-                                            className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-colors"
+                                            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition-colors"
                                         >
                                             Verify
                                         </button>
                                     </div>
                                 )
                             ) : (
-                                <div className="px-6 py-3 bg-green-50 text-green-700 font-semibold rounded-xl border border-green-200 flex items-center gap-2">
+                                <div className="px-4 py-2 bg-green-50 text-green-700 text-sm font-semibold rounded-lg border border-green-200 flex items-center gap-1.5">
                                     <Check size={18} /> Verified
                                 </div>
                             )}
@@ -190,38 +190,22 @@ const MasterForm = ({ onSubmit }) => {
 
                 {/* Section 2: Academic Scores */}
                 <section>
-                    <div className="flex items-center gap-2 mb-4 text-slate-800">
-                        <div className="p-2 bg-indigo-100 rounded-lg text-indigo-600">
-                            <BookOpen size={20} />
+                    <div className="flex items-center gap-2 mb-3 text-slate-800">
+                        <div className="p-1.5 bg-indigo-100 rounded-md text-indigo-600">
+                            <BookOpen size={16} />
                         </div>
-                        <h3 className="text-lg font-bold">Academic Scores</h3>
+                        <h3 className="text-sm font-bold">Academic Scores</h3>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-5">
-                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                            <div className="flex justify-between mb-2">
-                                <label className="text-sm font-medium text-slate-700">JEE Mains Percentile</label>
-                                <div className="flex items-center gap-2">
-                                    <input
-                                        type="checkbox"
-                                        id="jeeNA"
-                                        className="w-4 h-4 rounded text-blue-600"
-                                        checked={formData.jeeNotAppeared}
-                                        onChange={e => setFormData({ ...formData, jeeNotAppeared: e.target.checked })}
-                                    />
-                                    <label htmlFor="jeeNA" className="text-xs text-slate-500 cursor-pointer">Not Appeared</label>
-                                </div>
-                            </div>
-                            <input
-                                type="number"
-                                placeholder="e.g. 94.50"
-                                className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 bg-white focus:border-blue-500 outline-none disabled:bg-slate-100 disabled:text-slate-400"
-                                value={formData.jeePercentile}
-                                onChange={e => setFormData({ ...formData, jeePercentile: e.target.value })}
-                                disabled={formData.jeeNotAppeared}
-                            />
-                            {errors.jeePercentile && <p className="text-xs text-red-500 mt-1">{errors.jeePercentile}</p>}
-                        </div>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+                        <InputField
+                            label="JEE Mains Percentile"
+                            placeholder="e.g. 94.50"
+                            type="number"
+                            value={formData.jeePercentile}
+                            onChange={e => setFormData({ ...formData, jeePercentile: e.target.value })}
+                            error={errors.jeePercentile}
+                        />
 
                         <InputField
                             label="BITSAT Score"
@@ -283,14 +267,14 @@ const MasterForm = ({ onSubmit }) => {
                 </section>
 
                 {/* Section 3: Optional Details (Accordion) */}
-                <details className="group border rounded-xl border-slate-200 overflow-hidden">
-                    <summary className="flex items-center justify-between p-4 bg-slate-50 cursor-pointer hover:bg-slate-100 transition-colors">
+                <details className="group border rounded-lg border-slate-200 overflow-hidden">
+                    <summary className="flex items-center justify-between px-3 py-2.5 bg-slate-50 cursor-pointer hover:bg-slate-100 transition-colors text-sm">
                         <span className="font-semibold text-slate-700">Additional Details (Optional)</span>
-                        <ChevronRight className="text-slate-400 group-open:rotate-90 transition-transform" />
+                        <ChevronRight size={16} className="text-slate-400 group-open:rotate-90 transition-transform" />
                     </summary>
-                    <div className="p-5 grid md:grid-cols-2 gap-5 border-t border-slate-200 bg-white">
+                    <div className="p-3 grid md:grid-cols-2 gap-3 border-t border-slate-200 bg-white">
                         <select
-                            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 outline-none focus:border-blue-500 bg-white"
+                            className="w-full px-3 py-2 rounded-lg border border-slate-200 outline-none focus:border-blue-500 bg-white text-sm"
                             value={formData.board}
                             onChange={e => setFormData({ ...formData, board: e.target.value })}
                         >
@@ -302,7 +286,7 @@ const MasterForm = ({ onSubmit }) => {
                         </select>
 
                         <select
-                            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 outline-none focus:border-blue-500 bg-white"
+                            className="w-full px-3 py-2 rounded-lg border border-slate-200 outline-none focus:border-blue-500 bg-white text-sm"
                             value={formData.homeState}
                             onChange={e => setFormData({ ...formData, homeState: e.target.value })}
                         >
@@ -332,16 +316,19 @@ const MasterForm = ({ onSubmit }) => {
                 </details>
 
                 {/* Submit Action */}
-                <div className="pt-4">
+                <div className="pt-3">
                     <button
                         onClick={handleSubmit}
-                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 transition-all active:scale-[0.99] flex items-center justify-center gap-2 group"
+                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-sm py-3 rounded-lg shadow-md shadow-blue-200 transition-all active:scale-[0.99] flex items-center justify-center gap-2 group"
                     >
                         <span>Continue to College Selection</span>
-                        <ChevronRight className="group-hover:translate-x-1 transition-transform" />
+                        <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
                     </button>
-                    <p className="text-center text-xs text-slate-400 mt-4 flex items-center justify-center gap-1">
-                        <Check size={12} /> Your data is 100% secure and encrypted
+                    <p className="text-center text-[11px] text-slate-400 mt-3 flex items-center justify-center gap-1">
+                        <Check size={10} /> Your data is 100% secure and encrypted
+                    </p>
+                    <p className="text-center text-[10px] text-slate-300 mt-1 flex items-center justify-center gap-1">
+                        <Sparkles size={9} className="text-indigo-400" /> Powered by Naviksha AI
                     </p>
                 </div>
             </div>

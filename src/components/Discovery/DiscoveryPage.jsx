@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Sparkles, ShoppingCart, Info, Search, SlidersHorizontal, X, Building2, GraduationCap, Award, Home } from 'lucide-react';
+import { Sparkles, ShoppingCart, Info, Search, SlidersHorizontal, X, Building2, GraduationCap, Award, Home, ArrowLeft } from 'lucide-react';
 import HorizontalList from './HorizontalList';
 import { COLLEGE_DATA } from '../../data/colleges';
 import { clsx } from 'clsx';
@@ -9,7 +9,7 @@ const ALL_COLLEGE_TYPES = [...new Set(COLLEGE_DATA.map(c => c.collegeType).filte
 const ALL_COURSES = [...new Set(COLLEGE_DATA.flatMap(c => c.courses || []))].sort();
 const ALL_ENTRANCE_EXAMS = [...new Set(COLLEGE_DATA.flatMap(c => (c.entranceExams || []).map(e => e.split(' (')[0])))].sort();
 
-const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpenCheckout }) => {
+const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpenCheckout, onBackToForm }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [showFilters, setShowFilters] = useState(false);
 
@@ -82,45 +82,56 @@ const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpe
     };
 
     return (
-        <div className="pb-32 bg-slate-50 min-h-screen">
+        <div className="pb-28 bg-slate-50 min-h-screen">
             {/* Sticky Header */}
             <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-slate-200">
-                <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-3">
-                    <div className="hidden md:block">
-                        <h1 className="text-xl font-bold text-slate-900">Select Colleges</h1>
-                        <p className="text-xs text-slate-500">Based on your eligibility profile</p>
+                <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                        {onBackToForm && (
+                            <button
+                                onClick={onBackToForm}
+                                className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
+                                title="Back to Form"
+                            >
+                                <ArrowLeft size={18} />
+                            </button>
+                        )}
+                        <div className="hidden md:block">
+                            <h1 className="text-lg font-bold text-slate-900 leading-tight">Select Colleges</h1>
+                            <p className="text-[11px] text-slate-500">Based on your eligibility profile</p>
+                        </div>
                     </div>
 
-                    <div className="flex bg-slate-100 rounded-full px-4 py-2 w-full max-w-sm">
-                        <Search size={18} className="text-slate-400 mr-2 flex-shrink-0" />
+                    <div className="flex bg-slate-100 rounded-full px-3 py-1.5 w-full max-w-sm">
+                        <Search size={16} className="text-slate-400 mr-2 flex-shrink-0" />
                         <input
                             type="text"
                             placeholder="Search colleges, courses, cities..."
-                            className="bg-transparent text-sm outline-none w-full"
+                            className="bg-transparent text-xs outline-none w-full"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5">
                         <button
                             onClick={() => setShowFilters(!showFilters)}
                             className={clsx(
-                                "px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all border",
+                                "px-2.5 py-1.5 rounded-lg text-[11px] font-semibold flex items-center gap-1 transition-all border",
                                 showFilters || activeFilterCount > 0
                                     ? "bg-blue-50 text-blue-700 border-blue-200"
                                     : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
                             )}
                         >
-                            <SlidersHorizontal size={14} />
+                            <SlidersHorizontal size={13} />
                             Filters
                             {activeFilterCount > 0 && (
-                                <span className="w-5 h-5 bg-blue-600 text-white rounded-full text-[10px] flex items-center justify-center font-bold">
+                                <span className="w-4 h-4 bg-blue-600 text-white rounded-full text-[9px] flex items-center justify-center font-bold">
                                     {activeFilterCount}
                                 </span>
                             )}
                         </button>
-                        <div className="bg-blue-100 text-blue-700 px-3 py-1.5 rounded-full text-xs font-bold">
+                        <div className="bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full text-[11px] font-bold">
                             {selectedColleges.length} Selected
                         </div>
                     </div>
@@ -229,10 +240,10 @@ const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpe
                 )}
             </header>
 
-            <main className="max-w-7xl mx-auto px-4 py-6 space-y-8">
+            <main className="max-w-7xl mx-auto px-4 py-4 space-y-6">
                 {filteredData.length === 0 ? (
-                    <div className="text-center py-20">
-                        <p className="text-slate-500 text-lg">No colleges match your filters.</p>
+                    <div className="text-center py-16">
+                        <p className="text-slate-500 text-sm">No colleges match your filters.</p>
                         <button onClick={clearFilters} className="mt-3 text-blue-600 font-medium text-sm hover:underline">
                             Clear filters
                         </button>
@@ -255,26 +266,26 @@ const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpe
 
             {/* Floating Action Bar */}
             {selectedColleges.length > 0 && (
-                <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-4 shadow-2xl z-50 animate-in slide-in-from-bottom duration-300">
-                    <div className="max-w-3xl mx-auto flex items-center justify-between gap-4">
+                <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-4 py-3 shadow-2xl z-50 animate-in slide-in-from-bottom duration-300">
+                    <div className="max-w-3xl mx-auto flex items-center justify-between gap-3">
                         <div className="hidden md:block">
-                            <p className="text-sm font-medium text-slate-500">Selected Colleges</p>
-                            <p className="text-2xl font-bold text-slate-900">{selectedColleges.length}</p>
+                            <p className="text-xs font-medium text-slate-500">Selected Colleges</p>
+                            <p className="text-xl font-bold text-slate-900">{selectedColleges.length}</p>
                         </div>
 
-                        <div className="flex gap-3 w-full md:w-auto">
+                        <div className="flex gap-2 w-full md:w-auto">
                             <button
                                 onClick={onOpenSummary}
-                                className="flex-1 md:flex-none px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl flex items-center justify-center gap-2 transition-colors"
+                                className="flex-1 md:flex-none px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-colors"
                             >
-                                <Info size={20} />
+                                <Info size={16} />
                                 Learn More
                             </button>
                             <button
                                 onClick={onOpenCheckout}
-                                className="flex-1 md:flex-none px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-blue-200 transition-all"
+                                className="flex-1 md:flex-none px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm font-semibold rounded-lg flex items-center justify-center gap-1.5 shadow-md shadow-blue-200 transition-all"
                             >
-                                <ShoppingCart size={20} />
+                                <ShoppingCart size={16} />
                                 Apply Now
                             </button>
                         </div>

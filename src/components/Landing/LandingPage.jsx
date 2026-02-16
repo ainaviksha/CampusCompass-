@@ -178,9 +178,15 @@ const LandingPage = ({ onGetStarted }) => {
                         {/* Left: Copy */}
                         <div className="text-center md:text-left">
                             {/* Badge */}
-                            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/60 text-blue-700 px-4 py-1.5 rounded-full text-xs font-semibold mb-8 animate-[fadeInDown_0.6s_ease]">
-                                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                                Admissions 2025-26 Open
+                            <div className="flex flex-wrap items-center gap-3 mb-8 animate-[fadeInDown_0.6s_ease]">
+                                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/60 text-blue-700 px-4 py-1.5 rounded-full text-xs font-semibold">
+                                    <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                                    Admissions 2025-26 Open
+                                </div>
+                                <div className="inline-flex items-center gap-1.5 bg-slate-900/5 border border-slate-200/60 text-slate-500 px-3 py-1 rounded-full text-[11px] font-medium">
+                                    <Sparkles size={12} className="text-indigo-500" />
+                                    Powered by Naviksha AI
+                                </div>
                             </div>
 
                             {/* Main headline */}
@@ -512,7 +518,7 @@ const LandingPage = ({ onGetStarted }) => {
                             <a href="#how-it-works" className="hover:text-slate-600 transition-colors">How It Works</a>
                             <a href="#testimonials" className="hover:text-slate-600 transition-colors">Testimonials</a>
                         </div>
-                        <p className="text-xs text-slate-400">© 2026 CampusCompass by Naviksha</p>
+                        <p className="text-xs text-slate-400">© 2026 CampusCompass · Powered by <span className="font-semibold text-slate-500">Naviksha AI</span></p>
                     </div>
                 </div>
             </footer>
