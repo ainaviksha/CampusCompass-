@@ -93,19 +93,19 @@ const MasterForm = ({ onSubmit }) => {
     return (
         <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
             {/* Header Banner */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-5 py-4 text-white relative overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-4 sm:px-5 py-3 sm:py-4 text-white relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-48 h-48 bg-white opacity-5 rounded-full -translate-y-1/2 translate-x-1/3"></div>
                 <div className="relative z-10">
                     <div className="inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[10px] font-semibold mb-2 border border-white/20">
                         <Sparkles size={11} className="text-yellow-300" />
                         <span>India's Smartest Application Platform</span>
                     </div>
-                    <h1 className="text-xl font-bold mb-1">Master Engineering Application Form</h1>
-                    <p className="text-blue-100 text-xs max-w-xl">Single form to apply to 120+ curated colleges based on your marks & achievements</p>
+                    <h1 className="text-lg sm:text-xl font-bold mb-1">Master Engineering Application Form</h1>
+                    <p className="text-blue-100 text-[11px] sm:text-xs max-w-xl">Single form to apply to 120+ curated colleges based on your marks & achievements</p>
                 </div>
             </div>
 
-            <div className="p-5 space-y-5">
+            <div className="p-3.5 sm:p-5 space-y-4 sm:space-y-5">
                 {/* Section 1: Personal Details */}
                 <section>
                     <div className="flex items-center gap-2 mb-3 text-slate-800">
@@ -115,7 +115,7 @@ const MasterForm = ({ onSubmit }) => {
                         <h3 className="text-sm font-bold">Personal & Contact Details</h3>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <InputField
                             label="Student Name"
                             placeholder="Enter full name"
@@ -134,7 +134,7 @@ const MasterForm = ({ onSubmit }) => {
 
                     <div className="mt-3">
                         <label className="block text-xs font-medium text-slate-600 mb-0.5">Contact Number</label>
-                        <div className="flex gap-2">
+                        <div className="flex flex-col sm:flex-row gap-2">
                             <div className="flex-1 relative">
                                 <input
                                     type="tel"
@@ -159,7 +159,7 @@ const MasterForm = ({ onSubmit }) => {
                                         Verify OTP
                                     </button>
                                 ) : (
-                                    <div className="flex gap-2 animate-in slide-in-from-right fade-in duration-300">
+                                    <div className="flex gap-2 animate-in slide-in-from-right fade-in duration-300 w-full sm:w-auto">
                                         <input
                                             type="text"
                                             placeholder="OTP"
@@ -197,7 +197,7 @@ const MasterForm = ({ onSubmit }) => {
                         <h3 className="text-sm font-bold">Academic Scores</h3>
                     </div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3">
                         <InputField
                             label="JEE Mains Percentile"
                             placeholder="e.g. 94.50"
@@ -272,7 +272,7 @@ const MasterForm = ({ onSubmit }) => {
                         <span className="font-semibold text-slate-700">Additional Details (Optional)</span>
                         <ChevronRight size={16} className="text-slate-400 group-open:rotate-90 transition-transform" />
                     </summary>
-                    <div className="p-3 grid md:grid-cols-2 gap-3 border-t border-slate-200 bg-white">
+                    <div className="p-3 grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-slate-200 bg-white">
                         <select
                             className="w-full px-3 py-2 rounded-lg border border-slate-200 outline-none focus:border-blue-500 bg-white text-sm"
                             value={formData.board}

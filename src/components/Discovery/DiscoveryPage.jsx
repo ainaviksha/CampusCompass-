@@ -85,25 +85,53 @@ const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpe
         <div className="pb-28 bg-slate-50 min-h-screen">
             {/* Sticky Header */}
             <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-slate-200">
-                <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                        {onBackToForm && (
+                <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2.5 sm:py-3">
+                    {/* Top row: back + title + filter + selected */}
+                    <div className="flex items-center justify-between gap-2 mb-2 sm:mb-0">
+                        <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                            {onBackToForm && (
+                                <button
+                                    onClick={onBackToForm}
+                                    className="p-1 sm:p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors flex-shrink-0"
+                                    title="Back to Form"
+                                >
+                                    <ArrowLeft size={16} />
+                                </button>
+                            )}
+                            <div className="hidden md:block">
+                                <h1 className="text-lg font-bold text-slate-900 leading-tight">Select Colleges</h1>
+                                <p className="text-[11px] text-slate-500">Based on your eligibility profile</p>
+                            </div>
+                            <h1 className="md:hidden text-sm font-bold text-slate-900 truncate">Select Colleges</h1>
+                        </div>
+
+                        <div className="flex items-center gap-1.5 flex-shrink-0">
                             <button
-                                onClick={onBackToForm}
-                                className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
-                                title="Back to Form"
+                                onClick={() => setShowFilters(!showFilters)}
+                                className={clsx(
+                                    "px-2 sm:px-2.5 py-1.5 rounded-lg text-[10px] sm:text-[11px] font-semibold flex items-center gap-1 transition-all border",
+                                    showFilters || activeFilterCount > 0
+                                        ? "bg-blue-50 text-blue-700 border-blue-200"
+                                        : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                                )}
                             >
-                                <ArrowLeft size={18} />
+                                <SlidersHorizontal size={12} />
+                                <span className="hidden sm:inline">Filters</span>
+                                {activeFilterCount > 0 && (
+                                    <span className="w-4 h-4 bg-blue-600 text-white rounded-full text-[9px] flex items-center justify-center font-bold">
+                                        {activeFilterCount}
+                                    </span>
+                                )}
                             </button>
-                        )}
-                        <div className="hidden md:block">
-                            <h1 className="text-lg font-bold text-slate-900 leading-tight">Select Colleges</h1>
-                            <p className="text-[11px] text-slate-500">Based on your eligibility profile</p>
+                            <div className="bg-blue-100 text-blue-700 px-2 sm:px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold whitespace-nowrap">
+                                {selectedColleges.length} Selected
+                            </div>
                         </div>
                     </div>
 
-                    <div className="flex bg-slate-100 rounded-full px-3 py-1.5 w-full max-w-sm">
-                        <Search size={16} className="text-slate-400 mr-2 flex-shrink-0" />
+                    {/* Search row — full width on mobile */}
+                    <div className="flex bg-slate-100 rounded-full px-3 py-1.5 w-full sm:max-w-sm">
+                        <Search size={15} className="text-slate-400 mr-2 flex-shrink-0" />
                         <input
                             type="text"
                             placeholder="Search colleges, courses, cities..."
@@ -112,86 +140,64 @@ const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpe
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
-
-                    <div className="flex items-center gap-1.5">
-                        <button
-                            onClick={() => setShowFilters(!showFilters)}
-                            className={clsx(
-                                "px-2.5 py-1.5 rounded-lg text-[11px] font-semibold flex items-center gap-1 transition-all border",
-                                showFilters || activeFilterCount > 0
-                                    ? "bg-blue-50 text-blue-700 border-blue-200"
-                                    : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
-                            )}
-                        >
-                            <SlidersHorizontal size={13} />
-                            Filters
-                            {activeFilterCount > 0 && (
-                                <span className="w-4 h-4 bg-blue-600 text-white rounded-full text-[9px] flex items-center justify-center font-bold">
-                                    {activeFilterCount}
-                                </span>
-                            )}
-                        </button>
-                        <div className="bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full text-[11px] font-bold">
-                            {selectedColleges.length} Selected
-                        </div>
-                    </div>
                 </div>
 
                 {/* Filter Panel */}
                 {showFilters && (
-                    <div className="border-t border-slate-100 bg-white px-4 py-4 animate-in slide-in-from-top duration-200">
-                        <div className="max-w-7xl mx-auto space-y-4">
-                            {/* Row 1: College Type + Toggles */}
-                            <div className="flex flex-wrap items-center gap-4">
-                                <div className="flex items-center gap-2">
-                                    <Building2 size={14} className="text-slate-500" />
-                                    <span className="text-xs font-semibold text-slate-500 uppercase">Type:</span>
-                                    {ALL_COLLEGE_TYPES.map(type => (
-                                        <button
-                                            key={type}
-                                            onClick={() => toggleArrayFilter('collegeType', type)}
-                                            className={clsx(
-                                                "px-2.5 py-1 rounded-lg text-xs font-medium transition-all border",
-                                                filters.collegeType.includes(type)
-                                                    ? "bg-blue-600 text-white border-blue-600"
-                                                    : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
-                                            )}
-                                        >
-                                            {type}
-                                        </button>
-                                    ))}
-
-                                    <span className="w-px h-5 bg-slate-200 mx-1"></span>
-
-                                    <button
-                                        onClick={() => setFilters(f => ({ ...f, nirfOnly: !f.nirfOnly }))}
-                                        className={clsx(
-                                            "px-2.5 py-1 rounded-lg text-xs font-medium transition-all border flex items-center gap-1",
-                                            filters.nirfOnly
-                                                ? "bg-amber-500 text-white border-amber-500"
-                                                : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
-                                        )}
-                                    >
-                                        <Award size={12} /> NIRF Ranked
-                                    </button>
-
-                                    <button
-                                        onClick={() => setFilters(f => ({ ...f, hasHostel: !f.hasHostel }))}
-                                        className={clsx(
-                                            "px-2.5 py-1 rounded-lg text-xs font-medium transition-all border flex items-center gap-1",
-                                            filters.hasHostel
-                                                ? "bg-emerald-500 text-white border-emerald-500"
-                                                : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
-                                        )}
-                                    >
-                                        <Home size={12} /> Has Hostel
-                                    </button>
+                    <div className="border-t border-slate-100 bg-white px-3 sm:px-4 py-3 sm:py-4 animate-in slide-in-from-top duration-200">
+                        <div className="max-w-7xl mx-auto space-y-3 sm:space-y-4">
+                            {/* Row 1: College Type */}
+                            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                                <div className="flex items-center gap-1.5 mr-1">
+                                    <Building2 size={13} className="text-slate-500" />
+                                    <span className="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase">Type:</span>
                                 </div>
+                                {ALL_COLLEGE_TYPES.map(type => (
+                                    <button
+                                        key={type}
+                                        onClick={() => toggleArrayFilter('collegeType', type)}
+                                        className={clsx(
+                                            "px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg text-[10px] sm:text-xs font-medium transition-all border",
+                                            filters.collegeType.includes(type)
+                                                ? "bg-blue-600 text-white border-blue-600"
+                                                : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                                        )}
+                                    >
+                                        {type}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Row 1b: Toggle filters */}
+                            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                                <button
+                                    onClick={() => setFilters(f => ({ ...f, nirfOnly: !f.nirfOnly }))}
+                                    className={clsx(
+                                        "px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg text-[10px] sm:text-xs font-medium transition-all border flex items-center gap-1",
+                                        filters.nirfOnly
+                                            ? "bg-amber-500 text-white border-amber-500"
+                                            : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                                    )}
+                                >
+                                    <Award size={11} /> NIRF Ranked
+                                </button>
+
+                                <button
+                                    onClick={() => setFilters(f => ({ ...f, hasHostel: !f.hasHostel }))}
+                                    className={clsx(
+                                        "px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg text-[10px] sm:text-xs font-medium transition-all border flex items-center gap-1",
+                                        filters.hasHostel
+                                            ? "bg-emerald-500 text-white border-emerald-500"
+                                            : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                                    )}
+                                >
+                                    <Home size={11} /> Has Hostel
+                                </button>
                             </div>
 
                             {/* Row 2: Placement % slider */}
-                            <div className="flex items-center gap-3">
-                                <span className="text-xs font-semibold text-slate-500 uppercase whitespace-nowrap">Min Placement %:</span>
+                            <div className="flex items-center gap-2 sm:gap-3">
+                                <span className="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase whitespace-nowrap">Min Placement %:</span>
                                 <input
                                     type="range"
                                     min="0"
@@ -199,23 +205,25 @@ const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpe
                                     step="5"
                                     value={filters.minPlacement}
                                     onChange={(e) => setFilters(f => ({ ...f, minPlacement: Number(e.target.value) }))}
-                                    className="w-40 accent-blue-600"
+                                    className="flex-1 max-w-[140px] accent-blue-600"
                                 />
-                                <span className="text-xs font-bold text-slate-700 min-w-[40px]">
+                                <span className="text-[10px] sm:text-xs font-bold text-slate-700 min-w-[36px]">
                                     {filters.minPlacement > 0 ? `${filters.minPlacement}%+` : 'Any'}
                                 </span>
                             </div>
 
                             {/* Row 3: Courses */}
-                            <div className="flex items-start gap-2 flex-wrap">
-                                <GraduationCap size={14} className="text-slate-500 mt-1" />
-                                <span className="text-xs font-semibold text-slate-500 uppercase mt-1">Courses:</span>
-                                {ALL_COURSES.slice(0, 12).map(course => (
+                            <div className="flex items-start gap-1.5 sm:gap-2 flex-wrap">
+                                <div className="flex items-center gap-1.5 mr-0.5">
+                                    <GraduationCap size={13} className="text-slate-500" />
+                                    <span className="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase">Courses:</span>
+                                </div>
+                                {ALL_COURSES.slice(0, 8).map(course => (
                                     <button
                                         key={course}
                                         onClick={() => toggleArrayFilter('courses', course)}
                                         className={clsx(
-                                            "px-2 py-0.5 rounded text-[11px] font-medium transition-all border",
+                                            "px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-[11px] font-medium transition-all border",
                                             filters.courses.includes(course)
                                                 ? "bg-indigo-600 text-white border-indigo-600"
                                                 : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
@@ -266,26 +274,32 @@ const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpe
 
             {/* Floating Action Bar */}
             {selectedColleges.length > 0 && (
-                <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-4 py-3 shadow-2xl z-50 animate-in slide-in-from-bottom duration-300">
-                    <div className="max-w-3xl mx-auto flex items-center justify-between gap-3">
+                <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-3 sm:px-4 py-2.5 sm:py-3 shadow-2xl z-50 animate-in slide-in-from-bottom duration-300">
+                    <div className="max-w-3xl mx-auto flex items-center justify-between gap-2 sm:gap-3">
                         <div className="hidden md:block">
                             <p className="text-xs font-medium text-slate-500">Selected Colleges</p>
                             <p className="text-xl font-bold text-slate-900">{selectedColleges.length}</p>
                         </div>
 
-                        <div className="flex gap-2 w-full md:w-auto">
+                        {/* Mobile: show count inline */}
+                        <div className="md:hidden flex-shrink-0">
+                            <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2 py-1 rounded-full">{selectedColleges.length}</span>
+                        </div>
+
+                        <div className="flex gap-1.5 sm:gap-2 flex-1 md:flex-none md:w-auto">
                             <button
                                 onClick={onOpenSummary}
-                                className="flex-1 md:flex-none px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-colors"
+                                className="flex-1 md:flex-none px-3 sm:px-4 py-2 sm:py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-semibold rounded-lg flex items-center justify-center gap-1 sm:gap-1.5 transition-colors"
                             >
-                                <Info size={16} />
-                                Learn More
+                                <Info size={14} />
+                                <span className="hidden sm:inline">Learn More</span>
+                                <span className="sm:hidden">More</span>
                             </button>
                             <button
                                 onClick={onOpenCheckout}
-                                className="flex-1 md:flex-none px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm font-semibold rounded-lg flex items-center justify-center gap-1.5 shadow-md shadow-blue-200 transition-all"
+                                className="flex-1 md:flex-none px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs sm:text-sm font-semibold rounded-lg flex items-center justify-center gap-1 sm:gap-1.5 shadow-md shadow-blue-200 transition-all"
                             >
-                                <ShoppingCart size={16} />
+                                <ShoppingCart size={14} />
                                 Apply Now
                             </button>
                         </div>

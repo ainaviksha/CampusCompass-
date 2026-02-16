@@ -8,7 +8,7 @@ const STEPS = [
 ];
 
 const StepIndicator = ({ currentStep = 1 }) => (
-    <div className="sticky top-0 z-30 px-4 py-3 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100">
+    <div className="sticky top-0 z-30 px-3 sm:px-4 py-2.5 sm:py-3 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100">
         <div className="flex items-center max-w-2xl mx-auto relative">
             {/* Desktop: Naviksha AI brand — left side */}
             <div className="hidden md:flex items-center gap-1.5 absolute -left-32 top-1/2 -translate-y-1/2">
@@ -25,19 +25,19 @@ const StepIndicator = ({ currentStep = 1 }) => (
 
                     return (
                         <React.Fragment key={step.label}>
-                            <div className="flex flex-col items-center gap-1">
+                            <div className="flex flex-col items-center gap-0.5 sm:gap-1">
                                 <div
-                                    className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${isComplete
+                                    className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold transition-all duration-300 ${isComplete
                                         ? 'bg-green-500 text-white shadow-md shadow-green-200'
                                         : isActive
                                             ? 'bg-blue-600 text-white shadow-md shadow-blue-200'
                                             : 'bg-slate-200 text-slate-400'
                                         }`}
                                 >
-                                    {isComplete ? <Check size={16} /> : stepNum}
+                                    {isComplete ? <Check size={14} /> : stepNum}
                                 </div>
                                 <span
-                                    className={`text-[10px] font-medium transition-colors duration-300 whitespace-nowrap ${isComplete
+                                    className={`text-[8px] sm:text-[10px] font-medium transition-colors duration-300 whitespace-nowrap ${isComplete
                                         ? 'text-green-600 font-semibold'
                                         : isActive
                                             ? 'text-blue-700 font-semibold'
@@ -49,7 +49,7 @@ const StepIndicator = ({ currentStep = 1 }) => (
                             </div>
 
                             {idx < STEPS.length - 1 && (
-                                <div className="flex-1 mx-2 relative -top-2">
+                                <div className="flex-1 mx-1 sm:mx-2 relative -top-2">
                                     <div className={`h-0.5 transition-colors duration-300 ${stepNum < currentStep ? 'bg-green-400' : 'bg-slate-200'
                                         }`} />
                                 </div>
