@@ -24,7 +24,7 @@ const FEATURES = [
         color: 'from-blue-500 to-cyan-400',
         bg: 'bg-blue-50',
         img: '/assets/feature-compare.png',
-        imgFit: 'cover',
+        imgFit: 'contain',
     },
     {
         icon: Sparkles,
