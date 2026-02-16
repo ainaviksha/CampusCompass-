@@ -375,7 +375,7 @@ const LandingPage = ({ onGetStarted }) => {
                                 {/* Feature image for cards that have one */}
                                 {feature.img && (
                                     <div className="mt-3 sm:mt-5 -mx-1 sm:-mx-2">
-                                        <img src={feature.img} alt={feature.title} className="w-full max-h-24 sm:max-h-40 object-contain rounded-lg sm:rounded-xl opacity-80 group-hover:opacity-100 transition-opacity" />
+                                        <img src={feature.img} alt={feature.title} className="w-full h-28 sm:h-40 object-cover object-center rounded-lg sm:rounded-xl opacity-80 group-hover:opacity-100 transition-opacity" />
                                     </div>
                                 )}
                             </div>
