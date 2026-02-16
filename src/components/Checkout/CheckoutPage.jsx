@@ -14,7 +14,6 @@ const CheckoutPage = ({ colleges, onBack, onPaymentComplete }) => {
         setIsProcessing(true);
         setTimeout(() => {
             setIsProcessing(false);
-            alert('🎉 Payment Successful! Your applications have been submitted.');
             if (onPaymentComplete) onPaymentComplete();
         }, 2000);
     };

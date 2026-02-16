@@ -7,13 +7,13 @@ import CheckoutPage from './components/Checkout/CheckoutPage';
 import StepIndicator from './components/Shared/StepIndicator';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('landing'); // 'landing' | 'form' | 'discovery' | 'checkout'
+  const [currentPage, setCurrentPage] = useState('landing'); // 'landing' | 'form' | 'discovery' | 'checkout' | 'success'
   const [formData, setFormData] = useState(null);
   const [selectedColleges, setSelectedColleges] = useState([]);
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
 
   // Map currentPage to step number
-  const stepMap = { form: 1, discovery: 2, checkout: 3 };
+  const stepMap = { form: 1, discovery: 2, checkout: 3, success: 4 };
   const currentStep = stepMap[currentPage] || 0;
 
   // Handle Form Submission
@@ -75,12 +75,29 @@ function App() {
             colleges={selectedColleges}
             onBack={() => { setCurrentPage('discovery'); window.scrollTo(0, 0); }}
             onPaymentComplete={() => {
-              setCurrentPage('landing');
-              setSelectedColleges([]);
-              setFormData(null);
+              setCurrentPage('success');
               window.scrollTo(0, 0);
             }}
           />
+        )}
+
+        {currentPage === 'success' && (
+          <div className="min-h-[80vh] flex items-center justify-center px-4">
+            <div className="max-w-md w-full text-center">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-6 rounded-full bg-green-100 flex items-center justify-center">
+                <svg className="w-10 h-10 sm:w-12 sm:h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">Payment Successful!</h1>
+              <p className="text-sm sm:text-base text-slate-500 mb-6 leading-relaxed">
+                Your applications to <span className="font-semibold text-slate-700">{selectedColleges.length} colleges</span> have been submitted successfully. You will receive confirmation details shortly.
+              </p>
+              <div className="p-4 bg-green-50 rounded-xl border border-green-100 mb-6">
+                <p className="text-xs sm:text-sm text-green-700 font-medium">🎉 All steps completed — your applications are being processed!</p>
+              </div>
+            </div>
+          </div>
         )}
       </div>
 
