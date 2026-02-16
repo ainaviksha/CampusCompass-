@@ -185,18 +185,16 @@ const LandingPage = ({ onGetStarted }) => {
 
                             {/* Main headline */}
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.08] tracking-tight mb-6 animate-[fadeInUp_0.8s_ease]">
-                                Find Your
+                                One Form,
                                 <br />
                                 <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">
-                                    Perfect Campus
+                                    {count}+ Colleges
                                 </span>
-                                <br />
-                                <span className="text-slate-400 text-3xl md:text-4xl lg:text-5xl font-bold">in Minutes.</span>
                             </h1>
 
                             {/* Subheadline */}
                             <p className="text-base md:text-lg text-slate-500 max-w-lg mx-auto md:mx-0 mb-8 leading-relaxed animate-[fadeInUp_1s_ease]">
-                                Compare <strong className="text-slate-700">{count}+ engineering colleges</strong> across placements, ROI, NIRF rankings, and campus life — powered by AI-driven insights.
+                                Stop filling repetitive applications. Submit once, apply everywhere — colleges curated to match <strong className="text-slate-700">your marks, preferences & achievements</strong>.
                             </p>
 
                             {/* CTA Group */}
