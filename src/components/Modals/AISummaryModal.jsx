@@ -12,61 +12,62 @@ const AISummaryModal = ({ isOpen, onClose, colleges }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white w-full max-w-5xl rounded-3xl shadow-2xl relative max-h-[90vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-300">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="bg-white w-full sm:max-w-5xl rounded-t-2xl sm:rounded-3xl shadow-2xl relative max-h-[95vh] sm:max-h-[90vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom sm:zoom-in-95 duration-300">
 
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50">
-                    <div>
-                        <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                            <Sparkles className="text-blue-600 fill-blue-100" />
+                <div className="flex items-center justify-between p-3.5 sm:p-6 border-b border-slate-100 bg-slate-50/50">
+                    <div className="min-w-0">
+                        <h2 className="text-base sm:text-2xl font-bold text-slate-900 flex items-center gap-1.5 sm:gap-2">
+                            <Sparkles className="text-blue-600 fill-blue-100 flex-shrink-0" />
                             AI Insights Summary
                         </h2>
-                        <p className="text-sm text-slate-500 mt-1">Comparing {colleges.length} selected institutes based on ROI & Placement Hygiene</p>
+                        <p className="text-[11px] sm:text-sm text-slate-500 mt-0.5 sm:mt-1 truncate">Comparing {colleges.length} selected institutes</p>
                     </div>
                     <button
                         onClick={onClose}
-                        className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-slate-600"
+                        className="p-1.5 sm:p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-slate-600 flex-shrink-0 ml-2"
                     >
-                        <X size={24} />
+                        <X size={20} className="sm:hidden" />
+                        <X size={24} className="hidden sm:block" />
                     </button>
                 </div>
 
                 {/* Content - Scrollable */}
-                <div className="overflow-y-auto p-6 space-y-8 bg-slate-50/30">
+                <div className="overflow-y-auto p-3 sm:p-6 space-y-4 sm:space-y-8 bg-slate-50/30">
                     {colleges.map((college) => (
-                        <div key={college.id} className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden group hover:border-blue-200 transition-colors">
+                        <div key={college.id} className="bg-white rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm overflow-hidden group hover:border-blue-200 transition-colors">
                             {/* College Header Card */}
-                            <div className="p-6 bg-gradient-to-br from-white to-slate-50 border-b border-slate-100 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-16 h-16 rounded-xl shadow-md border border-slate-200 flex items-center justify-center overflow-hidden bg-slate-50">
+                            <div className="p-3.5 sm:p-6 bg-gradient-to-br from-white to-slate-50 border-b border-slate-100 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 sm:gap-4">
+                                <div className="flex items-center gap-2.5 sm:gap-4 min-w-0">
+                                    <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl shadow-md border border-slate-200 flex items-center justify-center overflow-hidden bg-slate-50 flex-shrink-0">
                                         {college.logo ? (
                                             <img
                                                 src={college.logo}
                                                 alt=""
-                                                className="object-contain w-12 h-12"
+                                                className="object-contain w-8 h-8 sm:w-12 sm:h-12"
                                                 onError={(e) => {
                                                     e.target.style.display = 'none';
                                                     e.target.parentElement.style.background = 'linear-gradient(135deg, #2563EB, #4F46E5)';
-                                                    e.target.parentElement.innerHTML = `<span style="color:white;font-weight:800;font-size:1.25rem">${college.name.split(' ').filter(w => !['of', 'the', 'and'].includes(w.toLowerCase())).slice(0, 2).map(w => w[0]).join('').toUpperCase()}</span>`;
+                                                    e.target.parentElement.innerHTML = `<span style="color:white;font-weight:800;font-size:0.75rem">${college.name.split(' ').filter(w => !['of', 'the', 'and'].includes(w.toLowerCase())).slice(0, 2).map(w => w[0]).join('').toUpperCase()}</span>`;
                                                 }}
                                             />
                                         ) : (
-                                            <span className="text-white font-extrabold text-xl">
+                                            <span className="text-white font-extrabold text-sm sm:text-xl">
                                                 {college.name.split(' ').filter(w => !['of', 'the', 'and'].includes(w.toLowerCase())).slice(0, 2).map(w => w[0]).join('').toUpperCase()}
                                             </span>
                                         )}
                                     </div>
-                                    <div>
-                                        <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors">{college.name}</h3>
-                                        <div className="flex items-center gap-2 text-sm text-slate-500 mt-0.5 flex-wrap">
-                                            <span className="flex items-center gap-1"><MapPinIcon size={14} /> {college.city}, {college.state}</span>
+                                    <div className="min-w-0">
+                                        <h3 className="text-sm sm:text-xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors truncate">{college.name}</h3>
+                                        <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-sm text-slate-500 mt-0.5 flex-wrap">
+                                            <span className="flex items-center gap-0.5 sm:gap-1"><MapPinIcon size={12} /> {college.city}, {college.state}</span>
                                             <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
                                             <span>Est. {college.year}</span>
                                             {college.collegeType && (
                                                 <>
                                                     <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
-                                                    <span className={clsx("px-2 py-0.5 rounded-full text-xs font-semibold border", TYPE_COLORS[college.collegeType])}>
+                                                    <span className={clsx("px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-xs font-semibold border", TYPE_COLORS[college.collegeType])}>
                                                         {college.collegeType}
                                                     </span>
                                                 </>
@@ -75,50 +76,50 @@ const AISummaryModal = ({ isOpen, onClose, colleges }) => {
                                     </div>
                                 </div>
 
-                                <div className="flex items-center gap-3">
+                                <div className="flex items-center gap-2 sm:gap-3">
                                     {college.nirfRank && (
-                                        <div className="px-4 py-2 bg-amber-50 text-amber-700 rounded-lg flex flex-col items-center border border-amber-200">
-                                            <span className="text-xs font-semibold uppercase tracking-wider flex items-center gap-1"><Award size={12} /> NIRF</span>
-                                            <span className="text-lg font-bold">#{college.nirfRank}</span>
+                                        <div className="px-2 sm:px-4 py-1.5 sm:py-2 bg-amber-50 text-amber-700 rounded-lg flex flex-col items-center border border-amber-200">
+                                            <span className="text-[9px] sm:text-xs font-semibold uppercase tracking-wider flex items-center gap-1"><Award size={10} /> NIRF</span>
+                                            <span className="text-sm sm:text-lg font-bold">#{college.nirfRank}</span>
                                         </div>
                                     )}
                                     {college.rating && (
-                                        <div className="px-4 py-2 bg-yellow-50 text-yellow-700 rounded-lg flex flex-col items-center border border-yellow-200">
-                                            <span className="text-xs font-semibold uppercase tracking-wider flex items-center gap-1"><Star size={12} /> Rating</span>
-                                            <span className="text-lg font-bold">{college.rating}/5</span>
+                                        <div className="px-2 sm:px-4 py-1.5 sm:py-2 bg-yellow-50 text-yellow-700 rounded-lg flex flex-col items-center border border-yellow-200">
+                                            <span className="text-[9px] sm:text-xs font-semibold uppercase tracking-wider flex items-center gap-1"><Star size={10} /> Rating</span>
+                                            <span className="text-sm sm:text-lg font-bold">{college.rating}/5</span>
                                         </div>
                                     )}
-                                    <div className="px-4 py-2 bg-green-50 text-green-700 rounded-lg flex flex-col items-center border border-green-100">
-                                        <span className="text-xs font-semibold uppercase tracking-wider">ROI Score</span>
-                                        <span className="text-lg font-bold">{college.roi}%</span>
+                                    <div className="px-2 sm:px-4 py-1.5 sm:py-2 bg-green-50 text-green-700 rounded-lg flex flex-col items-center border border-green-100">
+                                        <span className="text-[9px] sm:text-xs font-semibold uppercase tracking-wider">ROI</span>
+                                        <span className="text-sm sm:text-lg font-bold">{college.roi}%</span>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Placement Stats Grid */}
                             <div className="grid grid-cols-2 md:grid-cols-5 divide-x divide-slate-100 border-b border-slate-100">
-                                <div className="p-4 flex flex-col items-center text-center">
-                                    <span className="text-xs text-slate-500 uppercase font-semibold mb-1">Avg Package</span>
-                                    <span className="text-lg font-bold text-slate-800">{college.avgPackage}</span>
+                                <div className="p-2.5 sm:p-4 flex flex-col items-center text-center">
+                                    <span className="text-[9px] sm:text-xs text-slate-500 uppercase font-semibold mb-0.5 sm:mb-1">Avg Pkg</span>
+                                    <span className="text-sm sm:text-lg font-bold text-slate-800">{college.avgPackage}</span>
                                 </div>
-                                <div className="p-4 flex flex-col items-center text-center">
-                                    <span className="text-xs text-slate-500 uppercase font-semibold mb-1">Highest</span>
-                                    <span className="text-lg font-bold text-slate-800">{college.highestPackage}</span>
+                                <div className="p-2.5 sm:p-4 flex flex-col items-center text-center">
+                                    <span className="text-[9px] sm:text-xs text-slate-500 uppercase font-semibold mb-0.5 sm:mb-1">Highest</span>
+                                    <span className="text-sm sm:text-lg font-bold text-slate-800">{college.highestPackage}</span>
                                 </div>
                                 {college.medianPackage && (
-                                    <div className="p-4 flex flex-col items-center text-center">
-                                        <span className="text-xs text-slate-500 uppercase font-semibold mb-1">Median</span>
-                                        <span className="text-lg font-bold text-slate-800">{college.medianPackage}</span>
+                                    <div className="p-2.5 sm:p-4 flex flex-col items-center text-center">
+                                        <span className="text-[9px] sm:text-xs text-slate-500 uppercase font-semibold mb-0.5 sm:mb-1">Median</span>
+                                        <span className="text-sm sm:text-lg font-bold text-slate-800">{college.medianPackage}</span>
                                     </div>
                                 )}
-                                <div className="p-4 flex flex-col items-center text-center">
-                                    <span className="text-xs text-slate-500 uppercase font-semibold mb-1">Total Fees</span>
-                                    <span className="text-lg font-bold text-slate-800">{college.fees.split(' ')[0]}</span>
+                                <div className="p-2.5 sm:p-4 flex flex-col items-center text-center">
+                                    <span className="text-[9px] sm:text-xs text-slate-500 uppercase font-semibold mb-0.5 sm:mb-1">Fees</span>
+                                    <span className="text-sm sm:text-lg font-bold text-slate-800">{college.fees.split(' ')[0]}</span>
                                 </div>
                                 {college.placementPercent && (
-                                    <div className="p-4 flex flex-col items-center text-center">
-                                        <span className="text-xs text-slate-500 uppercase font-semibold mb-1">Placed</span>
-                                        <span className="text-lg font-bold text-emerald-600">{college.placementPercent}%</span>
+                                    <div className="p-2.5 sm:p-4 flex flex-col items-center text-center">
+                                        <span className="text-[9px] sm:text-xs text-slate-500 uppercase font-semibold mb-0.5 sm:mb-1">Placed</span>
+                                        <span className="text-sm sm:text-lg font-bold text-emerald-600">{college.placementPercent}%</span>
                                     </div>
                                 )}
                             </div>
@@ -127,13 +128,13 @@ const AISummaryModal = ({ isOpen, onClose, colleges }) => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-0 divide-x divide-slate-100 border-b border-slate-100">
                                 {/* Courses */}
                                 {college.courses && college.courses.length > 0 && (
-                                    <div className="p-4">
-                                        <h4 className="text-xs font-semibold text-slate-500 uppercase mb-2 flex items-center gap-1.5">
-                                            <BookOpen size={12} /> Courses Offered
+                                    <div className="p-3 sm:p-4">
+                                        <h4 className="text-[9px] sm:text-xs font-semibold text-slate-500 uppercase mb-1.5 sm:mb-2 flex items-center gap-1.5">
+                                            <BookOpen size={11} /> Courses
                                         </h4>
-                                        <div className="flex flex-wrap gap-1.5">
+                                        <div className="flex flex-wrap gap-1 sm:gap-1.5">
                                             {college.courses.map(c => (
-                                                <span key={c} className="px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-medium">{c}</span>
+                                                <span key={c} className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 bg-indigo-50 text-indigo-700 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-medium">{c}</span>
                                             ))}
                                         </div>
                                     </div>
@@ -141,13 +142,13 @@ const AISummaryModal = ({ isOpen, onClose, colleges }) => {
 
                                 {/* Accreditation */}
                                 {college.accreditation && college.accreditation.length > 0 && (
-                                    <div className="p-4">
-                                        <h4 className="text-xs font-semibold text-slate-500 uppercase mb-2 flex items-center gap-1.5">
-                                            <Shield size={12} /> Accreditation
+                                    <div className="p-3 sm:p-4">
+                                        <h4 className="text-[9px] sm:text-xs font-semibold text-slate-500 uppercase mb-1.5 sm:mb-2 flex items-center gap-1.5">
+                                            <Shield size={11} /> Accreditation
                                         </h4>
-                                        <div className="flex flex-wrap gap-1.5">
+                                        <div className="flex flex-wrap gap-1 sm:gap-1.5">
                                             {college.accreditation.map(a => (
-                                                <span key={a} className="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-medium border border-emerald-100">{a}</span>
+                                                <span key={a} className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 bg-emerald-50 text-emerald-700 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-medium border border-emerald-100">{a}</span>
                                             ))}
                                         </div>
                                     </div>
@@ -186,13 +187,13 @@ const AISummaryModal = ({ isOpen, onClose, colleges }) => {
 
                             {/* Top Recruiters */}
                             {college.topRecruiters && college.topRecruiters.length > 0 && (
-                                <div className="p-4 border-b border-slate-100">
-                                    <h4 className="text-xs font-semibold text-slate-500 uppercase mb-2 flex items-center gap-1.5">
-                                        <Users size={12} /> Top Recruiters
+                                <div className="p-3 sm:p-4 border-b border-slate-100">
+                                    <h4 className="text-[9px] sm:text-xs font-semibold text-slate-500 uppercase mb-1.5 sm:mb-2 flex items-center gap-1.5">
+                                        <Users size={11} /> Top Recruiters
                                     </h4>
-                                    <div className="flex flex-wrap gap-1.5">
+                                    <div className="flex flex-wrap gap-1 sm:gap-1.5">
                                         {college.topRecruiters.map(r => (
-                                            <span key={r} className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-medium">{r}</span>
+                                            <span key={r} className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 bg-slate-100 text-slate-700 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-medium">{r}</span>
                                         ))}
                                     </div>
                                 </div>
@@ -221,14 +222,14 @@ const AISummaryModal = ({ isOpen, onClose, colleges }) => {
                             </div>
 
                             {/* Highlights & Action */}
-                            <div className="p-6 bg-slate-50 flex flex-col md:flex-row items-center justify-between gap-4">
-                                <div className="flex items-start gap-3 flex-1">
-                                    <div className="p-2 bg-blue-100 rounded-lg text-blue-600 mt-1">
-                                        <Sparkles size={16} />
+                            <div className="p-3.5 sm:p-6 bg-slate-50 flex flex-col md:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+                                <div className="flex items-start gap-2 sm:gap-3 flex-1 min-w-0">
+                                    <div className="p-1.5 sm:p-2 bg-blue-100 rounded-lg text-blue-600 mt-0.5 flex-shrink-0">
+                                        <Sparkles size={14} />
                                     </div>
-                                    <div>
-                                        <h4 className="font-semibold text-slate-900 text-sm">Key Highlights</h4>
-                                        <p className="text-sm text-slate-600 leading-relaxed max-w-2xl">{college.achievements || "Standard engineering curriculum with decent placement tracking."}</p>
+                                    <div className="min-w-0">
+                                        <h4 className="font-semibold text-slate-900 text-xs sm:text-sm">Key Highlights</h4>
+                                        <p className="text-[11px] sm:text-sm text-slate-600 leading-relaxed">{college.achievements || "Standard engineering curriculum with decent placement tracking."}</p>
                                     </div>
                                 </div>
 
@@ -236,9 +237,9 @@ const AISummaryModal = ({ isOpen, onClose, colleges }) => {
                                     href={college.website}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="whitespace-nowrap px-6 py-2.5 bg-white border-2 border-slate-200 hover:border-blue-500 text-slate-700 hover:text-blue-600 font-semibold rounded-xl flex items-center gap-2 transition-all shadow-sm hover:shadow-md"
+                                    className="whitespace-nowrap px-3.5 sm:px-6 py-2 sm:py-2.5 bg-white border-2 border-slate-200 hover:border-blue-500 text-slate-700 hover:text-blue-600 text-xs sm:text-sm font-semibold rounded-lg sm:rounded-xl flex items-center gap-1.5 sm:gap-2 transition-all shadow-sm hover:shadow-md flex-shrink-0"
                                 >
-                                    <ExternalLink size={16} />
+                                    <ExternalLink size={14} />
                                     Visit Website
                                 </a>
                             </div>
@@ -247,8 +248,8 @@ const AISummaryModal = ({ isOpen, onClose, colleges }) => {
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 border-t border-slate-200 bg-slate-50 text-center">
-                    <p className="text-xs text-slate-400">AI insights are generated based on available data points. Verification recommended.</p>
+                <div className="p-3 sm:p-4 border-t border-slate-200 bg-slate-50 text-center">
+                    <p className="text-[10px] sm:text-xs text-slate-400">AI insights are generated based on available data points. Verification recommended.</p>
                 </div>
             </div>
         </div>
