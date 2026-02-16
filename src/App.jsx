@@ -3,14 +3,18 @@ import LandingPage from './components/Landing/LandingPage';
 import MasterForm from './components/Form/MasterForm';
 import DiscoveryPage from './components/Discovery/DiscoveryPage';
 import AISummaryModal from './components/Modals/AISummaryModal';
-import CheckoutModal from './components/Modals/CheckoutModal';
+import CheckoutPage from './components/Checkout/CheckoutPage';
+import StepIndicator from './components/Shared/StepIndicator';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('landing'); // 'landing' | 'form' | 'discovery'
+  const [currentPage, setCurrentPage] = useState('landing'); // 'landing' | 'form' | 'discovery' | 'checkout'
   const [formData, setFormData] = useState(null);
   const [selectedColleges, setSelectedColleges] = useState([]);
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+
+  // Map currentPage to step number
+  const stepMap = { form: 1, discovery: 2, checkout: 3 };
+  const currentStep = stepMap[currentPage] || 0;
 
   // Handle Form Submission
   const handleFormSubmit = (data) => {
@@ -32,8 +36,17 @@ function App() {
     });
   };
 
+  // Navigate to checkout page
+  const handleGoToCheckout = () => {
+    setCurrentPage('checkout');
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div className="min-h-screen font-sans text-slate-900 bg-slate-50 selection:bg-blue-100 selection:text-blue-900">
+
+      {/* Global Sticky Step Indicator — visible on form, discovery & checkout pages */}
+      {currentStep > 0 && <StepIndicator currentStep={currentStep} />}
 
       {/* Page Content */}
       <div className="animate-in fade-in duration-500">
@@ -52,7 +65,21 @@ function App() {
             selectedColleges={selectedColleges}
             onToggleCollege={toggleCollege}
             onOpenSummary={() => setIsSummaryOpen(true)}
-            onOpenCheckout={() => setIsCheckoutOpen(true)}
+            onOpenCheckout={handleGoToCheckout}
+            onBackToForm={() => { setCurrentPage('form'); window.scrollTo(0, 0); }}
+          />
+        )}
+
+        {currentPage === 'checkout' && (
+          <CheckoutPage
+            colleges={selectedColleges}
+            onBack={() => { setCurrentPage('discovery'); window.scrollTo(0, 0); }}
+            onPaymentComplete={() => {
+              setCurrentPage('landing');
+              setSelectedColleges([]);
+              setFormData(null);
+              window.scrollTo(0, 0);
+            }}
           />
         )}
       </div>
@@ -61,12 +88,6 @@ function App() {
       <AISummaryModal
         isOpen={isSummaryOpen}
         onClose={() => setIsSummaryOpen(false)}
-        colleges={selectedColleges}
-      />
-
-      <CheckoutModal
-        isOpen={isCheckoutOpen}
-        onClose={() => setIsCheckoutOpen(false)}
         colleges={selectedColleges}
       />
 
