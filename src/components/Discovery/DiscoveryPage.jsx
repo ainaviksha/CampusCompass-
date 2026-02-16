@@ -286,7 +286,7 @@ const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpe
                             <span className="text-sm font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full">{selectedColleges.length}</span>
                         </div>
 
-                        <div className="flex gap-2 sm:gap-2 flex-1 md:flex-none md:w-auto">
+                        <div className="flex gap-2 sm:gap-2 flex-1 md:flex-none md:w-auto mb-3">
                             <button
                                 onClick={onOpenSummary}
                                 className="flex-1 md:flex-none px-4 sm:px-4 py-3 sm:py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl sm:rounded-lg flex items-center justify-center gap-1.5 transition-colors"
