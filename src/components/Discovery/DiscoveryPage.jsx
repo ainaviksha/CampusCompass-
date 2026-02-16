@@ -274,7 +274,7 @@ const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpe
 
             {/* Floating Action Bar */}
             {selectedColleges.length > 0 && (
-                <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-3 sm:px-4 py-2.5 sm:py-3 shadow-2xl z-50 animate-in slide-in-from-bottom duration-300">
+                <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-3 sm:px-4 py-3 sm:py-3 pb-[env(safe-area-inset-bottom,12px)] shadow-2xl z-50 animate-in slide-in-from-bottom duration-300">
                     <div className="max-w-3xl mx-auto flex items-center justify-between gap-2 sm:gap-3">
                         <div className="hidden md:block">
                             <p className="text-xs font-medium text-slate-500">Selected Colleges</p>
@@ -283,23 +283,23 @@ const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpe
 
                         {/* Mobile: show count inline */}
                         <div className="md:hidden flex-shrink-0">
-                            <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2 py-1 rounded-full">{selectedColleges.length}</span>
+                            <span className="text-sm font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full">{selectedColleges.length}</span>
                         </div>
 
-                        <div className="flex gap-1.5 sm:gap-2 flex-1 md:flex-none md:w-auto">
+                        <div className="flex gap-2 sm:gap-2 flex-1 md:flex-none md:w-auto">
                             <button
                                 onClick={onOpenSummary}
-                                className="flex-1 md:flex-none px-3 sm:px-4 py-2 sm:py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-semibold rounded-lg flex items-center justify-center gap-1 sm:gap-1.5 transition-colors"
+                                className="flex-1 md:flex-none px-4 sm:px-4 py-3 sm:py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl sm:rounded-lg flex items-center justify-center gap-1.5 transition-colors"
                             >
-                                <Info size={14} />
+                                <Info size={16} />
                                 <span className="hidden sm:inline">Learn More</span>
                                 <span className="sm:hidden">More</span>
                             </button>
                             <button
                                 onClick={onOpenCheckout}
-                                className="flex-1 md:flex-none px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs sm:text-sm font-semibold rounded-lg flex items-center justify-center gap-1 sm:gap-1.5 shadow-md shadow-blue-200 transition-all"
+                                className="flex-1 md:flex-none px-4 sm:px-4 py-3 sm:py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm font-semibold rounded-xl sm:rounded-lg flex items-center justify-center gap-1.5 shadow-md shadow-blue-200 transition-all"
                             >
-                                <ShoppingCart size={14} />
+                                <ShoppingCart size={16} />
                                 Apply Now
                             </button>
                         </div>
