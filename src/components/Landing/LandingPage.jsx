@@ -24,6 +24,7 @@ const FEATURES = [
         color: 'from-blue-500 to-cyan-400',
         bg: 'bg-blue-50',
         img: '/assets/feature-compare.png',
+        imgFit: 'cover',
     },
     {
         icon: Sparkles,
@@ -32,6 +33,7 @@ const FEATURES = [
         color: 'from-violet-500 to-purple-400',
         bg: 'bg-violet-50',
         img: '/assets/feature-ai.png',
+        imgFit: 'contain',
     },
     {
         icon: BarChart3,
@@ -375,7 +377,7 @@ const LandingPage = ({ onGetStarted }) => {
                                 {/* Feature image for cards that have one */}
                                 {feature.img && (
                                     <div className="mt-3 sm:mt-5 -mx-1 sm:-mx-2">
-                                        <img src={feature.img} alt={feature.title} className="w-full h-28 sm:h-40 object-cover object-center rounded-lg sm:rounded-xl opacity-80 group-hover:opacity-100 transition-opacity" />
+                                        <img src={feature.img} alt={feature.title} className={`w-full h-28 sm:h-40 ${feature.imgFit === 'contain' ? 'object-contain' : 'object-cover'} object-center rounded-lg sm:rounded-xl opacity-80 group-hover:opacity-100 transition-opacity`} />
                                     </div>
                                 )}
                             </div>
