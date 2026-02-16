@@ -1,18 +1,80 @@
-import React, { useState } from 'react';
-import { Sparkles, ShoppingCart, Info, Search } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Sparkles, ShoppingCart, Info, Search, SlidersHorizontal, X, Building2, GraduationCap, Award, Home } from 'lucide-react';
 import HorizontalList from './HorizontalList';
 import { COLLEGE_DATA } from '../../data/colleges';
+import { clsx } from 'clsx';
+
+// Extract unique values for filters
+const ALL_COLLEGE_TYPES = [...new Set(COLLEGE_DATA.map(c => c.collegeType).filter(Boolean))];
+const ALL_COURSES = [...new Set(COLLEGE_DATA.flatMap(c => c.courses || []))].sort();
+const ALL_ENTRANCE_EXAMS = [...new Set(COLLEGE_DATA.flatMap(c => (c.entranceExams || []).map(e => e.split(' (')[0])))].sort();
 
 const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpenCheckout }) => {
     const [searchTerm, setSearchTerm] = useState('');
+    const [showFilters, setShowFilters] = useState(false);
 
-    const filteredData = COLLEGE_DATA.filter(c =>
-        c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        c.city.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // Filter state
+    const [filters, setFilters] = useState({
+        collegeType: [],
+        minPlacement: 0,
+        hasHostel: false,
+        courses: [],
+        nirfOnly: false,
+    });
+
+    const activeFilterCount = useMemo(() => {
+        let count = 0;
+        if (filters.collegeType.length) count++;
+        if (filters.minPlacement > 0) count++;
+        if (filters.hasHostel) count++;
+        if (filters.courses.length) count++;
+        if (filters.nirfOnly) count++;
+        return count;
+    }, [filters]);
+
+    const toggleArrayFilter = (key, value) => {
+        setFilters(prev => ({
+            ...prev,
+            [key]: prev[key].includes(value)
+                ? prev[key].filter(v => v !== value)
+                : [...prev[key], value]
+        }));
+    };
+
+    const clearFilters = () => {
+        setFilters({ collegeType: [], minPlacement: 0, hasHostel: false, courses: [], nirfOnly: false });
+    };
+
+    const filteredData = useMemo(() => {
+        return COLLEGE_DATA.filter(c => {
+            // Search
+            const matchesSearch = !searchTerm ||
+                c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                c.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (c.courses || []).some(course => course.toLowerCase().includes(searchTerm.toLowerCase()));
+
+            // College Type
+            const matchesType = filters.collegeType.length === 0 || filters.collegeType.includes(c.collegeType);
+
+            // Placement %
+            const matchesPlacement = filters.minPlacement === 0 || (c.placementPercent && c.placementPercent >= filters.minPlacement);
+
+            // Hostel
+            const matchesHostel = !filters.hasHostel || c.hostelAvailable === true;
+
+            // Courses
+            const matchesCourses = filters.courses.length === 0 ||
+                filters.courses.some(fc => (c.courses || []).includes(fc));
+
+            // NIRF
+            const matchesNirf = !filters.nirfOnly || c.nirfRank !== null;
+
+            return matchesSearch && matchesType && matchesPlacement && matchesHostel && matchesCourses && matchesNirf;
+        });
+    }, [searchTerm, filters]);
 
     const categories = {
-        'Recommended For You': filteredData.slice(0, 5), // Mock recommendation logic
+        'Recommended For You': filteredData.slice(0, 5),
         'New-Age Skill-First Institutes': filteredData.filter(c => c.category === 'New-Age'),
         'Elite Universities': filteredData.filter(c => c.category === 'Elite'),
         'Affordable Universities': filteredData.filter(c => c.category === 'Affordable'),
@@ -23,17 +85,17 @@ const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpe
         <div className="pb-32 bg-slate-50 min-h-screen">
             {/* Sticky Header */}
             <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-slate-200">
-                <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-                    <div>
+                <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-3">
+                    <div className="hidden md:block">
                         <h1 className="text-xl font-bold text-slate-900">Select Colleges</h1>
-                        <p className="text-xs text-slate-500 hidden md:block">Based on your eligibility profile</p>
+                        <p className="text-xs text-slate-500">Based on your eligibility profile</p>
                     </div>
 
-                    <div className="flex bg-slate-100 rounded-full px-4 py-2 w-full max-w-xs mx-4">
-                        <Search size={18} className="text-slate-400 mr-2" />
+                    <div className="flex bg-slate-100 rounded-full px-4 py-2 w-full max-w-sm">
+                        <Search size={18} className="text-slate-400 mr-2 flex-shrink-0" />
                         <input
                             type="text"
-                            placeholder="Search colleges..."
+                            placeholder="Search colleges, courses, cities..."
                             className="bg-transparent text-sm outline-none w-full"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
@@ -41,26 +103,154 @@ const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpe
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <div className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold">
+                        <button
+                            onClick={() => setShowFilters(!showFilters)}
+                            className={clsx(
+                                "px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all border",
+                                showFilters || activeFilterCount > 0
+                                    ? "bg-blue-50 text-blue-700 border-blue-200"
+                                    : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                            )}
+                        >
+                            <SlidersHorizontal size={14} />
+                            Filters
+                            {activeFilterCount > 0 && (
+                                <span className="w-5 h-5 bg-blue-600 text-white rounded-full text-[10px] flex items-center justify-center font-bold">
+                                    {activeFilterCount}
+                                </span>
+                            )}
+                        </button>
+                        <div className="bg-blue-100 text-blue-700 px-3 py-1.5 rounded-full text-xs font-bold">
                             {selectedColleges.length} Selected
                         </div>
                     </div>
                 </div>
+
+                {/* Filter Panel */}
+                {showFilters && (
+                    <div className="border-t border-slate-100 bg-white px-4 py-4 animate-in slide-in-from-top duration-200">
+                        <div className="max-w-7xl mx-auto space-y-4">
+                            {/* Row 1: College Type + Toggles */}
+                            <div className="flex flex-wrap items-center gap-4">
+                                <div className="flex items-center gap-2">
+                                    <Building2 size={14} className="text-slate-500" />
+                                    <span className="text-xs font-semibold text-slate-500 uppercase">Type:</span>
+                                    {ALL_COLLEGE_TYPES.map(type => (
+                                        <button
+                                            key={type}
+                                            onClick={() => toggleArrayFilter('collegeType', type)}
+                                            className={clsx(
+                                                "px-2.5 py-1 rounded-lg text-xs font-medium transition-all border",
+                                                filters.collegeType.includes(type)
+                                                    ? "bg-blue-600 text-white border-blue-600"
+                                                    : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                                            )}
+                                        >
+                                            {type}
+                                        </button>
+                                    ))}
+
+                                    <span className="w-px h-5 bg-slate-200 mx-1"></span>
+
+                                    <button
+                                        onClick={() => setFilters(f => ({ ...f, nirfOnly: !f.nirfOnly }))}
+                                        className={clsx(
+                                            "px-2.5 py-1 rounded-lg text-xs font-medium transition-all border flex items-center gap-1",
+                                            filters.nirfOnly
+                                                ? "bg-amber-500 text-white border-amber-500"
+                                                : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                                        )}
+                                    >
+                                        <Award size={12} /> NIRF Ranked
+                                    </button>
+
+                                    <button
+                                        onClick={() => setFilters(f => ({ ...f, hasHostel: !f.hasHostel }))}
+                                        className={clsx(
+                                            "px-2.5 py-1 rounded-lg text-xs font-medium transition-all border flex items-center gap-1",
+                                            filters.hasHostel
+                                                ? "bg-emerald-500 text-white border-emerald-500"
+                                                : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                                        )}
+                                    >
+                                        <Home size={12} /> Has Hostel
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Row 2: Placement % slider */}
+                            <div className="flex items-center gap-3">
+                                <span className="text-xs font-semibold text-slate-500 uppercase whitespace-nowrap">Min Placement %:</span>
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    step="5"
+                                    value={filters.minPlacement}
+                                    onChange={(e) => setFilters(f => ({ ...f, minPlacement: Number(e.target.value) }))}
+                                    className="w-40 accent-blue-600"
+                                />
+                                <span className="text-xs font-bold text-slate-700 min-w-[40px]">
+                                    {filters.minPlacement > 0 ? `${filters.minPlacement}%+` : 'Any'}
+                                </span>
+                            </div>
+
+                            {/* Row 3: Courses */}
+                            <div className="flex items-start gap-2 flex-wrap">
+                                <GraduationCap size={14} className="text-slate-500 mt-1" />
+                                <span className="text-xs font-semibold text-slate-500 uppercase mt-1">Courses:</span>
+                                {ALL_COURSES.slice(0, 12).map(course => (
+                                    <button
+                                        key={course}
+                                        onClick={() => toggleArrayFilter('courses', course)}
+                                        className={clsx(
+                                            "px-2 py-0.5 rounded text-[11px] font-medium transition-all border",
+                                            filters.courses.includes(course)
+                                                ? "bg-indigo-600 text-white border-indigo-600"
+                                                : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                                        )}
+                                    >
+                                        {course}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Clear */}
+                            {activeFilterCount > 0 && (
+                                <button
+                                    onClick={clearFilters}
+                                    className="text-xs text-red-500 hover:text-red-700 font-medium flex items-center gap-1"
+                                >
+                                    <X size={12} /> Clear all filters
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                )}
             </header>
 
             <main className="max-w-7xl mx-auto px-4 py-6 space-y-8">
-                {Object.entries(categories).map(([title, colleges]) => (
-                    colleges.length > 0 && (
-                        <section key={title}>
-                            <HorizontalList
-                                title={title}
-                                colleges={colleges}
-                                selectedColleges={selectedColleges}
-                                onToggle={onToggleCollege}
-                            />
-                        </section>
-                    )
-                ))}
+                {filteredData.length === 0 ? (
+                    <div className="text-center py-20">
+                        <p className="text-slate-500 text-lg">No colleges match your filters.</p>
+                        <button onClick={clearFilters} className="mt-3 text-blue-600 font-medium text-sm hover:underline">
+                            Clear filters
+                        </button>
+                    </div>
+                ) : (
+                    Object.entries(categories).map(([title, colleges]) => (
+                        colleges.length > 0 && (
+                            <section key={title}>
+                                <HorizontalList
+                                    title={title}
+                                    colleges={colleges}
+                                    selectedColleges={selectedColleges}
+                                    onToggle={onToggleCollege}
+                                />
+                            </section>
+                        )
+                    ))
+                )}
             </main>
 
             {/* Floating Action Bar */}
