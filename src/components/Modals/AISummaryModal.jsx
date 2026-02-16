@@ -12,11 +12,11 @@ const AISummaryModal = ({ isOpen, onClose, colleges }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white w-full sm:max-w-5xl rounded-t-2xl sm:rounded-3xl shadow-2xl relative max-h-[95vh] sm:max-h-[90vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom sm:zoom-in-95 duration-300">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
+            <div className="bg-white w-full sm:max-w-5xl rounded-t-2xl sm:rounded-3xl shadow-2xl relative max-h-[85dvh] sm:max-h-[90vh] flex flex-col overflow-hidden" onClick={e => e.stopPropagation()}>
 
-                {/* Header */}
-                <div className="flex items-center justify-between p-3.5 sm:p-6 border-b border-slate-100 bg-slate-50/50">
+                {/* Header - sticky so close button is always reachable */}
+                <div className="flex items-center justify-between p-3.5 sm:p-6 border-b border-slate-100 bg-slate-50/50 sticky top-0 z-10">
                     <div className="min-w-0">
                         <h2 className="text-base sm:text-2xl font-bold text-slate-900 flex items-center gap-1.5 sm:gap-2">
                             <Sparkles className="text-blue-600 fill-blue-100 flex-shrink-0" />
@@ -158,29 +158,29 @@ const AISummaryModal = ({ isOpen, onClose, colleges }) => {
                             {/* Campus & Admissions */}
                             <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-100 border-b border-slate-100">
                                 {college.campusArea && (
-                                    <div className="p-3 flex flex-col items-center text-center">
-                                        <span className="text-[10px] text-slate-500 uppercase font-semibold mb-0.5">Campus</span>
-                                        <span className="text-sm font-bold text-slate-700">{college.campusArea}</span>
+                                    <div className="p-2 sm:p-3 flex flex-col items-center text-center">
+                                        <span className="text-[9px] sm:text-[10px] text-slate-500 uppercase font-semibold mb-0.5">Campus</span>
+                                        <span className="text-xs sm:text-sm font-bold text-slate-700">{college.campusArea}</span>
                                     </div>
                                 )}
                                 {college.hostelAvailable !== undefined && (
-                                    <div className="p-3 flex flex-col items-center text-center">
-                                        <span className="text-[10px] text-slate-500 uppercase font-semibold mb-0.5">Hostel</span>
-                                        <span className={clsx("text-sm font-bold", college.hostelAvailable ? 'text-emerald-600' : 'text-red-500')}>
-                                            {college.hostelAvailable ? '✓ Available' : '✗ N/A'}
+                                    <div className="p-2 sm:p-3 flex flex-col items-center text-center">
+                                        <span className="text-[9px] sm:text-[10px] text-slate-500 uppercase font-semibold mb-0.5">Hostel</span>
+                                        <span className={clsx("text-xs sm:text-sm font-bold", college.hostelAvailable ? 'text-emerald-600' : 'text-red-500')}>
+                                            {college.hostelAvailable ? '✓ Yes' : '✗ N/A'}
                                         </span>
                                     </div>
                                 )}
                                 {college.studentFacultyRatio && (
-                                    <div className="p-3 flex flex-col items-center text-center">
-                                        <span className="text-[10px] text-slate-500 uppercase font-semibold mb-0.5">Student:Faculty</span>
-                                        <span className="text-sm font-bold text-slate-700">{college.studentFacultyRatio}</span>
+                                    <div className="p-2 sm:p-3 flex flex-col items-center text-center">
+                                        <span className="text-[9px] sm:text-[10px] text-slate-500 uppercase font-semibold mb-0.5">Stu:Fac</span>
+                                        <span className="text-xs sm:text-sm font-bold text-slate-700">{college.studentFacultyRatio}</span>
                                     </div>
                                 )}
                                 {college.totalSeats && (
-                                    <div className="p-3 flex flex-col items-center text-center">
-                                        <span className="text-[10px] text-slate-500 uppercase font-semibold mb-0.5">Total Seats</span>
-                                        <span className="text-sm font-bold text-slate-700">{college.totalSeats.toLocaleString()}</span>
+                                    <div className="p-2 sm:p-3 flex flex-col items-center text-center">
+                                        <span className="text-[9px] sm:text-[10px] text-slate-500 uppercase font-semibold mb-0.5">Seats</span>
+                                        <span className="text-xs sm:text-sm font-bold text-slate-700">{college.totalSeats.toLocaleString()}</span>
                                     </div>
                                 )}
                             </div>
@@ -200,23 +200,23 @@ const AISummaryModal = ({ isOpen, onClose, colleges }) => {
                             )}
 
                             {/* Admission & Scholarships Row */}
-                            <div className="grid grid-cols-1 md:grid-cols-3 divide-x divide-slate-100 border-b border-slate-100">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-slate-100 border-b border-slate-100">
                                 {college.entranceExams && college.entranceExams.length > 0 && (
-                                    <div className="p-4">
-                                        <h4 className="text-[10px] font-semibold text-slate-500 uppercase mb-1.5">Entrance Exams</h4>
-                                        <p className="text-sm text-slate-700 font-medium">{college.entranceExams.join(', ')}</p>
+                                    <div className="px-3 py-2 sm:p-4">
+                                        <h4 className="text-[9px] sm:text-[10px] font-semibold text-slate-500 uppercase mb-0.5 sm:mb-1.5">Entrance Exams</h4>
+                                        <p className="text-[11px] sm:text-sm text-slate-700 font-medium">{college.entranceExams.join(', ')}</p>
                                     </div>
                                 )}
                                 {college.cutoff && (
-                                    <div className="p-4">
-                                        <h4 className="text-[10px] font-semibold text-slate-500 uppercase mb-1.5">Cutoff (Approx)</h4>
-                                        <p className="text-sm text-slate-700 font-medium">{college.cutoff}</p>
+                                    <div className="px-3 py-2 sm:p-4">
+                                        <h4 className="text-[9px] sm:text-[10px] font-semibold text-slate-500 uppercase mb-0.5 sm:mb-1.5">Cutoff (Approx)</h4>
+                                        <p className="text-[11px] sm:text-sm text-slate-700 font-medium">{college.cutoff}</p>
                                     </div>
                                 )}
                                 {college.scholarships && (
-                                    <div className="p-4">
-                                        <h4 className="text-[10px] font-semibold text-slate-500 uppercase mb-1.5">Scholarships</h4>
-                                        <p className="text-sm text-slate-700 font-medium">{college.scholarships}</p>
+                                    <div className="px-3 py-2 sm:p-4">
+                                        <h4 className="text-[9px] sm:text-[10px] font-semibold text-slate-500 uppercase mb-0.5 sm:mb-1.5">Scholarships</h4>
+                                        <p className="text-[11px] sm:text-sm text-slate-700 font-medium">{college.scholarships}</p>
                                     </div>
                                 )}
                             </div>
