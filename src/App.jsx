@@ -55,7 +55,7 @@ function App() {
         )}
 
         {currentPage === 'form' && (
-          <div className="py-12 px-4">
+          <div className="py-4 px-4">
             <MasterForm onSubmit={handleFormSubmit} />
           </div>
         )}
