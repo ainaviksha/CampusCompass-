@@ -23,6 +23,7 @@ app = FastAPI(
 # CORS Configuration
 origins = [
     "https://master-application-form.vercel.app",
+    "https://applichoice.naviksha.co.in",
     "http://localhost:5173",
     "http://localhost:3000",
 ]
