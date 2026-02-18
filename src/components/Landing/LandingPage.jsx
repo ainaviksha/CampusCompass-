@@ -52,7 +52,7 @@ const FEATURES = [
 ];
 
 const TESTIMONIALS = [
-    { name: 'Arjun S.', college: 'IIT Madras', text: 'Applied to 8 colleges in under 5 minutes. Naviksha AI saved me weeks of form-filling.', rating: 5 },
+    { name: 'Arjun S.', college: 'IIT Madras', text: 'Applied to 8 colleges in under 5 minutes. Applichoice saved me weeks of form-filling.', rating: 5 },
     { name: 'Priya M.', college: 'BITS Pilani', text: 'The ROI comparison helped me pick BITS over a private college. Best decision of my life.', rating: 5 },
     { name: 'Rohit K.', college: 'Scaler SST', text: 'AI recommendations suggested Scaler — wasn\'t even on my radar. Now placed at Google!', rating: 5 },
 ];
@@ -148,8 +148,9 @@ const LandingPage = ({ onGetStarted }) => {
             <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrollY > 50 ? 'bg-white/90 backdrop-blur-xl shadow-lg shadow-slate-100/50 border-b border-slate-100' : 'bg-transparent'}`}>
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <img src="/logo.png" alt="Naviksha AI" className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg" />
-                        <span className="font-extrabold text-base sm:text-lg tracking-tight">Naviksha AI</span>
+                        <img src="/logo.png" alt="Applichoice" className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg" />
+                        <span className="font-extrabold text-base sm:text-lg tracking-tight">Applichoice</span>
+                        <span className="hidden sm:inline-block text-[10px] text-slate-400 font-medium border-l border-slate-200 pl-2 ml-0.5">Powered by Naviksha AI</span>
                     </div>
                     <div className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-500">
                         <a href="#features" className="hover:text-slate-900 transition-colors">Features</a>
@@ -188,7 +189,7 @@ const LandingPage = ({ onGetStarted }) => {
                                 </div>
                                 <div className="inline-flex items-center gap-1.5 bg-slate-900/5 border border-slate-200/60 text-slate-500 px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-medium">
                                     <Sparkles size={11} className="text-indigo-500" />
-                                    Powered by Naviksha AI
+                                    Powered by Naviksha AI Engine
                                 </div>
                             </div>
 
@@ -349,7 +350,7 @@ const LandingPage = ({ onGetStarted }) => {
                         <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-semibold mb-4">
                             <Sparkles size={12} /> Features
                         </div>
-                        <h2 className="text-2xl sm:text-3xl md:text-5xl font-black tracking-tight mb-3 sm:mb-4">Master Engineering Application Form</h2>
+                        <h2 className="text-2xl sm:text-3xl md:text-5xl font-black tracking-tight mb-3 sm:mb-4">Why Choose Applichoice?</h2>
                         <p className="text-slate-500 max-w-xl mx-auto text-sm sm:text-lg">We remove the friction from college applications so you can focus on choosing the right future.</p>
                     </div>
 
@@ -431,7 +432,7 @@ const LandingPage = ({ onGetStarted }) => {
                         <div className="inline-flex items-center gap-2 bg-amber-50 text-amber-600 px-3 py-1 rounded-full text-xs font-semibold mb-4">
                             <Star size={12} /> Testimonials
                         </div>
-                        <h2 className="text-2xl sm:text-3xl md:text-5xl font-black tracking-tight mb-3 sm:mb-4">Students Love Naviksha AI</h2>
+                        <h2 className="text-2xl sm:text-3xl md:text-5xl font-black tracking-tight mb-3 sm:mb-4">Students Love Applichoice</h2>
                         <p className="text-slate-500 max-w-lg mx-auto text-sm sm:text-lg">Here's what students who used the platform have to say.</p>
                     </div>
 
@@ -493,9 +494,9 @@ const LandingPage = ({ onGetStarted }) => {
                     <div className="absolute bottom-0 left-[30%] w-[400px] h-[400px] bg-gradient-to-br from-blue-50/60 to-indigo-50/40 rounded-full blur-3xl"></div>
                 </div>
                 <div className="max-w-3xl mx-auto text-center">
-                    <img src="/logo.png" alt="Naviksha AI" className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl mx-auto" />
+                    <img src="/logo.png" alt="Applichoice" className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl mx-auto" />
                     <h2 className="text-2xl sm:text-3xl md:text-5xl font-black tracking-tight mt-4 sm:mt-6 mb-3 sm:mb-4">Ready to find your campus?</h2>
-                    <p className="text-sm sm:text-lg text-slate-500 mb-6 sm:mb-8 max-w-md mx-auto">Join thousands of students who simplified their admission journey with data-driven decisions.</p>
+                    <p className="text-sm sm:text-lg text-slate-500 mb-6 sm:mb-8 max-w-md mx-auto">Join thousands of students who simplified their admission journey with Applichoice.</p>
                     <button
                         onClick={onGetStarted}
                         className="group px-6 sm:px-10 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-2xl shadow-xl shadow-blue-200/50 transition-all active:scale-[0.97] flex items-center justify-center gap-2 mx-auto text-base sm:text-lg hover:shadow-2xl"
@@ -515,15 +516,16 @@ const LandingPage = ({ onGetStarted }) => {
                 <div className="max-w-6xl mx-auto">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                         <div className="flex items-center gap-2.5">
-                            <img src="/logo.png" alt="Naviksha AI" className="w-7 h-7 rounded-lg" />
-                            <span className="font-extrabold text-sm tracking-tight">Naviksha AI</span>
+                            <img src="/logo.png" alt="Applichoice" className="w-7 h-7 rounded-lg" />
+                            <span className="font-extrabold text-sm tracking-tight">Applichoice</span>
+                            <span className="text-[10px] text-slate-400 font-medium">Powered by Naviksha AI</span>
                         </div>
                         <div className="flex items-center gap-6 text-sm text-slate-400">
                             <a href="#features" className="hover:text-slate-600 transition-colors">Features</a>
                             <a href="#how-it-works" className="hover:text-slate-600 transition-colors">How It Works</a>
                             <a href="#testimonials" className="hover:text-slate-600 transition-colors">Testimonials</a>
                         </div>
-                        <p className="text-xs text-slate-400">© 2026 Naviksha AI · All rights reserved</p>
+                        <p className="text-xs text-slate-400">© 2026 Applichoice · Powered by Naviksha AI · All rights reserved</p>
                     </div>
                 </div>
             </footer>
