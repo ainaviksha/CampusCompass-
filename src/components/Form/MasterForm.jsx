@@ -1,7 +1,31 @@
 import React, { useState } from 'react';
-import { ChevronRight, Check, AlertCircle, Sparkles, Target, BookOpen } from 'lucide-react';
+import { ChevronRight, Check, AlertCircle, Sparkles, Target, BookOpen, X } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+
+const INDIAN_STATES = [
+    'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
+    'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand',
+    'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur',
+    'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab',
+    'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
+    'Uttar Pradesh', 'Uttarakhand', 'West Bengal',
+    // Union Territories
+    'Andaman & Nicobar Islands', 'Chandigarh', 'Dadra & Nagar Haveli and Daman & Diu',
+    'Delhi (NCT)', 'Jammu & Kashmir', 'Ladakh', 'Lakshadweep', 'Puducherry'
+];
+
+const EXAM_FIELDS = [
+    { key: 'jeePercentile', label: 'JEE Mains', placeholder: 'e.g. 94.50', unit: 'Percentile' },
+    { key: 'bitsatScore', label: 'BITSAT', placeholder: 'Out of 390', unit: 'Score' },
+    { key: 'comedkRank', label: 'COMEDK', placeholder: 'All India Rank', unit: 'Rank' },
+    { key: 'viteeeRank', label: 'VITEEE', placeholder: 'Rank', unit: 'Rank' },
+    { key: 'kcetRank', label: 'KCET', placeholder: 'CET Rank', unit: 'Rank' },
+    { key: 'mhtcetPercentile', label: 'MHT-CET', placeholder: 'e.g. 95.50', unit: 'Percentile' },
+    { key: 'eapcetRank', label: 'EAPCET', placeholder: 'Rank', unit: 'Rank' },
+    { key: 'srmjeeRank', label: 'SRMJEE', placeholder: 'Rank', unit: 'Rank' },
+    { key: 'wbjeeRank', label: 'WBJEE', placeholder: 'Rank', unit: 'Rank' },
+];
 
 const InputField = ({ label, error, ...props }) => (
     <div className="space-y-0.5">
@@ -27,7 +51,6 @@ const MasterForm = ({ onSubmit }) => {
         studentName: '',
         parentName: '',
         contact: '',
-        jeeNotAppeared: false,
         jeePercentile: '',
         bitsatScore: '',
         comedkRank: '',
@@ -39,9 +62,33 @@ const MasterForm = ({ onSubmit }) => {
         eapcetRank: '',
         board: '',
         homeState: '',
-        pcm: '',
-        olympiad: ''
+        marks: {
+            physics: '',
+            chemistry: '',
+            math: '',
+            computerScience: ''
+        },
+        olympiad: {
+            physics: '',
+            math: '',
+            chemistry: ''
+        }
     });
+
+    // Track which exams the user has NOT appeared for
+    const [notAppeared, setNotAppeared] = useState({});
+
+    const toggleNotAppeared = (key) => {
+        setNotAppeared(prev => {
+            const updated = { ...prev, [key]: !prev[key] };
+            // Clear the score if marking as not appeared
+            if (updated[key]) {
+                setFormData(fd => ({ ...fd, [key]: '' }));
+                setErrors(errs => ({ ...errs, [key]: null }));
+            }
+            return updated;
+        });
+    };
 
     const [errors, setErrors] = useState({});
     const [otpSent, setOtpSent] = useState(false);
@@ -53,8 +100,11 @@ const MasterForm = ({ onSubmit }) => {
         if (!formData.studentName.trim()) newErrors.studentName = "Student Name is required";
         if (!formData.parentName.trim()) newErrors.parentName = "Parent Name is required";
         if (!formData.contact.match(/^\d{10}$/)) newErrors.contact = "Valid 10-digit number required";
-        if (!formData.jeePercentile || formData.jeePercentile < 0 || formData.jeePercentile > 100) {
-            newErrors.jeePercentile = "Valid JEE Percentile (0-100) required";
+
+        // Check that user has appeared for at least one exam
+        const appearedForAny = EXAM_FIELDS.some(f => !notAppeared[f.key] && formData[f.key]);
+        if (!appearedForAny) {
+            newErrors._exams = "Please enter at least one exam score";
         }
 
         setErrors(newErrors);
@@ -186,88 +236,74 @@ const MasterForm = ({ onSubmit }) => {
 
                 <hr className="border-slate-100" />
 
-                {/* Section 2: Academic Scores */}
+                {/* Section 2: Exam Scores */}
                 <section>
-                    <div className="flex items-center gap-2 mb-3 text-slate-800">
+                    <div className="flex items-center gap-2 mb-1 text-slate-800">
                         <div className="p-1.5 bg-indigo-100 rounded-md text-indigo-600">
                             <BookOpen size={16} />
                         </div>
-                        <h3 className="text-sm font-bold">Academic Scores</h3>
+                        <h3 className="text-sm font-bold">Exam Scores</h3>
                     </div>
+                    <p className="text-[11px] text-slate-400 mb-3 ml-8">
+                        Enter scores for exams you've appeared in. Toggle "Didn't appear" for exams you haven't taken. We use these to match you with eligible colleges.
+                    </p>
 
-                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3">
-                        <InputField
-                            label="JEE Mains Percentile"
-                            placeholder="e.g. 94.50"
-                            type="number"
-                            value={formData.jeePercentile}
-                            onChange={e => setFormData({ ...formData, jeePercentile: e.target.value })}
-                            error={errors.jeePercentile}
-                        />
-
-                        <InputField
-                            label="BITSAT Score"
-                            placeholder="Out of 390"
-                            type="number"
-                            value={formData.bitsatScore}
-                            onChange={e => setFormData({ ...formData, bitsatScore: e.target.value })}
-                        />
-                        <InputField
-                            label="COMEDK Rank"
-                            placeholder="All India Rank"
-                            type="number"
-                            value={formData.comedkRank}
-                            onChange={e => setFormData({ ...formData, comedkRank: e.target.value })}
-                        />
-                        <InputField
-                            label="VITEEE Rank"
-                            placeholder="Rank"
-                            type="number"
-                            value={formData.viteeeRank}
-                            onChange={e => setFormData({ ...formData, viteeeRank: e.target.value })}
-                        />
-                        <InputField
-                            label="KCET Rank"
-                            placeholder="CET Rank"
-                            type="number"
-                            value={formData.kcetRank}
-                            onChange={e => setFormData({ ...formData, kcetRank: e.target.value })}
-                        />
-                        <InputField
-                            label="MHT-CET Percentile"
-                            placeholder="e.g. 95.50"
-                            type="number"
-                            value={formData.mhtcetPercentile}
-                            onChange={e => setFormData({ ...formData, mhtcetPercentile: e.target.value })}
-                        />
-                        <InputField
-                            label="EAPCET Rank"
-                            placeholder="Rank"
-                            type="number"
-                            value={formData.eapcetRank}
-                            onChange={e => setFormData({ ...formData, eapcetRank: e.target.value })}
-                        />
-                        <InputField
-                            label="SRMJEE Rank"
-                            placeholder="Rank"
-                            type="number"
-                            value={formData.srmjeeRank}
-                            onChange={e => setFormData({ ...formData, srmjeeRank: e.target.value })}
-                        />
-                        <InputField
-                            label="WBJEE Rank"
-                            placeholder="Rank"
-                            type="number"
-                            value={formData.wbjeeRank}
-                            onChange={e => setFormData({ ...formData, wbjeeRank: e.target.value })}
-                        />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3">
+                        {EXAM_FIELDS.map(exam => (
+                            <div
+                                key={exam.key}
+                                className={twMerge(
+                                    "rounded-lg border p-2.5 transition-all duration-200",
+                                    notAppeared[exam.key]
+                                        ? "border-slate-100 bg-slate-50 opacity-60"
+                                        : "border-slate-200 bg-white"
+                                )}
+                            >
+                                <div className="flex items-center justify-between mb-1.5">
+                                    <span className="text-xs font-semibold text-slate-700">{exam.label} <span className="text-[10px] font-normal text-slate-400">({exam.unit})</span></span>
+                                    <button
+                                        type="button"
+                                        onClick={() => toggleNotAppeared(exam.key)}
+                                        className={twMerge(
+                                            "text-[10px] font-medium px-2 py-0.5 rounded-full transition-colors",
+                                            notAppeared[exam.key]
+                                                ? "bg-amber-100 text-amber-700 hover:bg-amber-200"
+                                                : "bg-slate-100 text-slate-500 hover:bg-slate-200"
+                                        )}
+                                    >
+                                        {notAppeared[exam.key] ? "Didn't appear" : "Skip"}
+                                    </button>
+                                </div>
+                                {notAppeared[exam.key] ? (
+                                    <div className="text-[11px] text-slate-400 italic py-1.5">Not appeared — skipped</div>
+                                ) : (
+                                    <input
+                                        type="number"
+                                        placeholder={exam.placeholder}
+                                        className={twMerge(
+                                            "w-full px-2.5 py-1.5 rounded-md border text-sm outline-none transition-all",
+                                            errors[exam.key]
+                                                ? "border-red-300 bg-red-50 focus:border-red-500"
+                                                : "border-slate-200 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                                        )}
+                                        value={formData[exam.key]}
+                                        onChange={e => setFormData(fd => ({ ...fd, [exam.key]: e.target.value }))}
+                                    />
+                                )}
+                            </div>
+                        ))}
                     </div>
+                    {errors._exams && (
+                        <p className="text-xs text-red-500 font-medium mt-2 flex items-center gap-1">
+                            <AlertCircle size={12} /> {errors._exams}
+                        </p>
+                    )}
                 </section>
 
                 {/* Section 3: Optional Details (Accordion) */}
                 <details className="group border rounded-lg border-slate-200 overflow-hidden">
                     <summary className="flex items-center justify-between px-3 py-2.5 bg-slate-50 cursor-pointer hover:bg-slate-100 transition-colors text-sm">
-                        <span className="font-semibold text-slate-700">Additional Details (Optional)</span>
+                        <span className="font-semibold text-slate-700">Optional Details (Boost Recommendations)</span>
                         <ChevronRight size={16} className="text-slate-400 group-open:rotate-90 transition-transform" />
                     </summary>
                     <div className="p-3 grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-slate-200 bg-white">
@@ -288,28 +324,73 @@ const MasterForm = ({ onSubmit }) => {
                             value={formData.homeState}
                             onChange={e => setFormData({ ...formData, homeState: e.target.value })}
                         >
-                            <option value="">Home State</option>
-                            <option value="Karnataka">Karnataka</option>
-                            <option value="Maharashtra">Maharashtra</option>
-                            <option value="Delhi">Delhi</option>
-                            <option value="Tamil Nadu">Tamil Nadu</option>
-                            <option value="Other">Other</option>
+                            <option value="">Home State / UT</option>
+                            {INDIAN_STATES.map(state => (
+                                <option key={state} value={state}>{state}</option>
+                            ))}
                         </select>
 
-                        <InputField
-                            label="PCM Aggregate %"
-                            placeholder="e.g. 88.5"
-                            type="number"
-                            value={formData.pcm}
-                            onChange={e => setFormData({ ...formData, pcm: e.target.value })}
-                        />
 
-                        <InputField
-                            label="Olympiad Achievements"
-                            placeholder="e.g. RMO qualified"
-                            value={formData.olympiad}
-                            onChange={e => setFormData({ ...formData, olympiad: e.target.value })}
-                        />
+                        <div className="col-span-1 sm:col-span-2 mt-2">
+                            <label className="block text-xs font-medium text-slate-600 mb-2">PCM + CS Marks (%)</label>
+                            <div className="grid grid-cols-2 gap-3">
+                                <input
+                                    type="number"
+                                    placeholder="Physics %"
+                                    className="w-full px-3 py-2 rounded-lg border border-slate-200 outline-none focus:border-blue-500 bg-white text-sm"
+                                    value={formData.marks.physics}
+                                    onChange={e => setFormData({ ...formData, marks: { ...formData.marks, physics: e.target.value } })}
+                                />
+                                <input
+                                    type="number"
+                                    placeholder="Chemistry %"
+                                    className="w-full px-3 py-2 rounded-lg border border-slate-200 outline-none focus:border-blue-500 bg-white text-sm"
+                                    value={formData.marks.chemistry}
+                                    onChange={e => setFormData({ ...formData, marks: { ...formData.marks, chemistry: e.target.value } })}
+                                />
+                                <input
+                                    type="number"
+                                    placeholder="Math %"
+                                    className="w-full px-3 py-2 rounded-lg border border-slate-200 outline-none focus:border-blue-500 bg-white text-sm"
+                                    value={formData.marks.math}
+                                    onChange={e => setFormData({ ...formData, marks: { ...formData.marks, math: e.target.value } })}
+                                />
+                                <input
+                                    type="number"
+                                    placeholder="Comp. Sci %"
+                                    className="w-full px-3 py-2 rounded-lg border border-slate-200 outline-none focus:border-blue-500 bg-white text-sm"
+                                    value={formData.marks.computerScience}
+                                    onChange={e => setFormData({ ...formData, marks: { ...formData.marks, computerScience: e.target.value } })}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="col-span-1 sm:col-span-2 mt-2">
+                            <label className="block text-xs font-medium text-slate-600 mb-2">Olympiad Scores</label>
+                            <div className="grid grid-cols-3 gap-3">
+                                <input
+                                    type="text"
+                                    placeholder="Physics"
+                                    className="w-full px-3 py-2 rounded-lg border border-slate-200 outline-none focus:border-blue-500 bg-white text-sm"
+                                    value={formData.olympiad.physics}
+                                    onChange={e => setFormData({ ...formData, olympiad: { ...formData.olympiad, physics: e.target.value } })}
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Math"
+                                    className="w-full px-3 py-2 rounded-lg border border-slate-200 outline-none focus:border-blue-500 bg-white text-sm"
+                                    value={formData.olympiad.math}
+                                    onChange={e => setFormData({ ...formData, olympiad: { ...formData.olympiad, math: e.target.value } })}
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Chemistry"
+                                    className="w-full px-3 py-2 rounded-lg border border-slate-200 outline-none focus:border-blue-500 bg-white text-sm"
+                                    value={formData.olympiad.chemistry}
+                                    onChange={e => setFormData({ ...formData, olympiad: { ...formData.olympiad, chemistry: e.target.value } })}
+                                />
+                            </div>
+                        </div>
                     </div>
                 </details>
 

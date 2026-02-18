@@ -425,7 +425,7 @@ const LandingPage = ({ onGetStarted }) => {
             </section>
 
             {/* ──── TESTIMONIALS ──── */}
-            <section id="testimonials" className="py-12 sm:py-20 md:py-28 px-4 sm:px-6" ref={testRef}>
+            {/* <section id="testimonials" className="py-12 sm:py-20 md:py-28 px-4 sm:px-6" ref={testRef}>
                 <div className="max-w-5xl mx-auto">
                     <div className="text-center mb-6 sm:mb-10 md:mb-16">
                         <div className="inline-flex items-center gap-2 bg-amber-50 text-amber-600 px-3 py-1 rounded-full text-xs font-semibold mb-4">
@@ -465,10 +465,10 @@ const LandingPage = ({ onGetStarted }) => {
                         ))}
                     </div>
                 </div>
-            </section>
+            </section> */}
 
             {/* ──── DATA HIGHLIGHT ──── */}
-            <section className="py-10 sm:py-16 px-4 sm:px-6 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 relative overflow-hidden">
+            {/* <section className="py-10 sm:py-16 px-4 sm:px-6 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 relative overflow-hidden">
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px]"></div>
                 <div className="max-w-5xl mx-auto relative z-10">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 text-center text-white">
@@ -485,7 +485,7 @@ const LandingPage = ({ onGetStarted }) => {
                         ))}
                     </div>
                 </div>
-            </section>
+            </section> */}
 
             {/* ──── FINAL CTA ──── */}
             <section className="py-16 sm:py-24 md:py-32 px-4 sm:px-6 relative">

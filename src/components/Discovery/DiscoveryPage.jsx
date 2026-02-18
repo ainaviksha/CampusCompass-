@@ -1,15 +1,16 @@
 import React, { useState, useMemo } from 'react';
 import { Sparkles, ShoppingCart, Info, Search, SlidersHorizontal, X, Building2, GraduationCap, Award, Home, ArrowLeft } from 'lucide-react';
 import HorizontalList from './HorizontalList';
-import { COLLEGE_DATA } from '../../data/colleges';
+import useColleges from '../../hooks/useColleges';
 import { clsx } from 'clsx';
 
-// Extract unique values for filters
-const ALL_COLLEGE_TYPES = [...new Set(COLLEGE_DATA.map(c => c.collegeType).filter(Boolean))];
-const ALL_COURSES = [...new Set(COLLEGE_DATA.flatMap(c => c.courses || []))].sort();
-const ALL_ENTRANCE_EXAMS = [...new Set(COLLEGE_DATA.flatMap(c => (c.entranceExams || []).map(e => e.split(' (')[0])))].sort();
-
 const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpenCheckout, onBackToForm }) => {
+    const { colleges: COLLEGE_DATA, loading, error } = useColleges();
+
+    // Derived Constants
+    const ALL_COLLEGE_TYPES = useMemo(() => [...new Set(COLLEGE_DATA.map(c => c.collegeType).filter(Boolean))], [COLLEGE_DATA]);
+    const ALL_COURSES = useMemo(() => [...new Set(COLLEGE_DATA.flatMap(c => c.courses || []))].sort(), [COLLEGE_DATA]);
+
     const [searchTerm, setSearchTerm] = useState('');
     const [showFilters, setShowFilters] = useState(false);
 
@@ -71,7 +72,7 @@ const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpe
 
             return matchesSearch && matchesType && matchesPlacement && matchesHostel && matchesCourses && matchesNirf;
         });
-    }, [searchTerm, filters]);
+    }, [searchTerm, filters, COLLEGE_DATA]);
 
     const categories = {
         'Recommended For You': filteredData.slice(0, 5),
@@ -80,6 +81,22 @@ const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpe
         'Affordable Universities': filteredData.filter(c => c.category === 'Affordable'),
         'Online Bachelor\'s': filteredData.filter(c => c.category === 'Online'),
     };
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+                <div className="text-slate-500 font-medium animate-pulse">Loading colleges...</div>
+            </div>
+        );
+    }
+
+    if (error && COLLEGE_DATA.length === 0) {
+        return (
+            <div className="min-h-screen bg-slate-50 flex items-center justify-center text-red-500">
+                Failed to load colleges. Please try again later.
+            </div>
+        );
+    }
 
     return (
         <div className="pb-28 bg-slate-50 min-h-screen">
