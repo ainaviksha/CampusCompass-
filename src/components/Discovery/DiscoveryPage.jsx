@@ -2,7 +2,12 @@ import React, { useState, useMemo } from 'react';
 import { Sparkles, ShoppingCart, Info, Search, SlidersHorizontal, X, Building2, GraduationCap, Award, Home, ArrowLeft } from 'lucide-react';
 import HorizontalList from './HorizontalList';
 import useColleges from '../../hooks/useColleges';
+import { getRecommendedColleges } from '../../utils/recommend';
 import { clsx } from 'clsx';
+
+const STORAGE_KEYS = {
+    formData: 'naviksha_formData',
+};
 
 const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpenCheckout, onBackToForm }) => {
     const { colleges: COLLEGE_DATA, loading, error } = useColleges();
@@ -74,8 +79,23 @@ const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpe
         });
     }, [searchTerm, filters, COLLEGE_DATA]);
 
+    // Read student form data from sessionStorage for recommendations
+    const studentFormData = useMemo(() => {
+        try {
+            const stored = sessionStorage.getItem(STORAGE_KEYS.formData);
+            return stored ? JSON.parse(stored) : null;
+        } catch {
+            return null;
+        }
+    }, []);
+
+    const recommended = useMemo(
+        () => getRecommendedColleges(filteredData, studentFormData, 6),
+        [filteredData, studentFormData]
+    );
+
     const categories = {
-        'Recommended For You': filteredData.slice(0, 5),
+        'Recommended For You': recommended,
         'New-Age Skill-First Institutes': filteredData.filter(c => c.category === 'New-Age'),
         'Elite Universities': filteredData.filter(c => c.category === 'Elite'),
         'Affordable Universities': filteredData.filter(c => c.category === 'Affordable'),
