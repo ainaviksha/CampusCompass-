@@ -37,6 +37,7 @@ class CollegeBase(BaseModel):
     alumniCount: Optional[int] = None
     autonomy: Optional[str] = None
     logo: Optional[str] = None
+    logoDarkBg: Optional[bool] = None
     website: Optional[str] = None
     achievements: Optional[str] = None
 

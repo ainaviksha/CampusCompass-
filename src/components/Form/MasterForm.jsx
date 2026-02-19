@@ -122,6 +122,33 @@ const MasterForm = ({ onSubmit }) => {
     const [otpSent, setOtpSent] = useState(false);
     const [otpVerified, setOtpVerified] = useState(false);
     const [otpInput, setOtpInput] = useState('');
+    const [otpLoading, setOtpLoading] = useState(false);
+    const [verifyLoading, setVerifyLoading] = useState(false);
+    const [resendTimer, setResendTimer] = useState(0);
+    const timerRef = React.useRef(null);
+
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+    // Start 30-second resend countdown
+    const startResendTimer = () => {
+        setResendTimer(30);
+        if (timerRef.current) clearInterval(timerRef.current);
+        timerRef.current = setInterval(() => {
+            setResendTimer(prev => {
+                if (prev <= 1) {
+                    clearInterval(timerRef.current);
+                    timerRef.current = null;
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+    };
+
+    // Cleanup timer on unmount
+    useEffect(() => {
+        return () => { if (timerRef.current) clearInterval(timerRef.current); };
+    }, []);
 
     const validate = () => {
         const newErrors = {};
@@ -139,20 +166,57 @@ const MasterForm = ({ onSubmit }) => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSendOTP = () => {
+    const handleSendOTP = async () => {
         if (!formData.contact.match(/^\d{10}$/)) {
-            setErrors(prev => ({ ...prev, contact: "Enter valid number first" }));
+            setErrors(prev => ({ ...prev, contact: "Enter valid 10-digit number first" }));
             return;
         }
-        setOtpSent(true);
+        setOtpLoading(true);
+        setErrors(prev => ({ ...prev, otp: null }));
+        try {
+            const res = await fetch(`${API_URL}/otp/send`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone: formData.contact })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setOtpSent(true);
+                startResendTimer();
+            } else {
+                setErrors(prev => ({ ...prev, otp: data.detail || data.message || "Failed to send OTP" }));
+            }
+        } catch {
+            setErrors(prev => ({ ...prev, otp: "Network error. Please try again." }));
+        } finally {
+            setOtpLoading(false);
+        }
     };
 
-    const handleVerifyOTP = () => {
-        if (otpInput.trim().length > 0) {
-            setOtpVerified(true);
-            setErrors(prev => ({ ...prev, otp: null }));
-        } else {
-            setErrors(prev => ({ ...prev, otp: "Please enter OTP" }));
+    const handleVerifyOTP = async () => {
+        if (!otpInput.trim()) {
+            setErrors(prev => ({ ...prev, otp: "Please enter the OTP" }));
+            return;
+        }
+        setVerifyLoading(true);
+        setErrors(prev => ({ ...prev, otp: null }));
+        try {
+            const res = await fetch(`${API_URL}/otp/verify`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone: formData.contact, otp: otpInput.trim() })
+            });
+            const data = await res.json();
+            if (res.ok && data.verified) {
+                setOtpVerified(true);
+                if (timerRef.current) clearInterval(timerRef.current);
+            } else {
+                setErrors(prev => ({ ...prev, otp: data.detail || data.message || "Invalid OTP" }));
+            }
+        } catch {
+            setErrors(prev => ({ ...prev, otp: "Network error. Please try again." }));
+        } finally {
+            setVerifyLoading(false);
         }
     };
 
@@ -230,25 +294,44 @@ const MasterForm = ({ onSubmit }) => {
                                 !otpSent ? (
                                     <button
                                         onClick={handleSendOTP}
-                                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors whitespace-nowrap"
+                                        disabled={otpLoading}
+                                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors whitespace-nowrap flex items-center gap-1.5"
                                     >
-                                        Verify OTP
+                                        {otpLoading ? (
+                                            <><span className="inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span> Sending...</>
+                                        ) : (
+                                            'Send OTP'
+                                        )}
                                     </button>
                                 ) : (
-                                    <div className="flex gap-2 animate-in slide-in-from-right fade-in duration-300 w-full sm:w-auto">
-                                        <input
-                                            type="text"
-                                            placeholder="OTP"
-                                            className="w-20 px-2 py-2 rounded-lg border border-slate-200 outline-none focus:border-blue-500 text-sm text-center tracking-widest"
-                                            maxLength={4}
-                                            value={otpInput}
-                                            onChange={e => setOtpInput(e.target.value)}
-                                        />
+                                    <div className="flex flex-col gap-2 animate-in slide-in-from-right fade-in duration-300 w-full sm:w-auto">
+                                        <div className="flex gap-2">
+                                            <input
+                                                type="text"
+                                                placeholder="Enter OTP"
+                                                className="w-24 px-2 py-2 rounded-lg border border-slate-200 outline-none focus:border-blue-500 text-sm text-center tracking-widest"
+                                                maxLength={6}
+                                                value={otpInput}
+                                                onChange={e => setOtpInput(e.target.value.replace(/\D/g, ''))}
+                                            />
+                                            <button
+                                                onClick={handleVerifyOTP}
+                                                disabled={verifyLoading}
+                                                className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors flex items-center gap-1.5"
+                                            >
+                                                {verifyLoading ? (
+                                                    <><span className="inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span> Verifying</>
+                                                ) : (
+                                                    'Verify'
+                                                )}
+                                            </button>
+                                        </div>
                                         <button
-                                            onClick={handleVerifyOTP}
-                                            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition-colors"
+                                            onClick={handleSendOTP}
+                                            disabled={resendTimer > 0 || otpLoading}
+                                            className="text-[11px] text-blue-600 hover:text-blue-700 disabled:text-slate-400 disabled:cursor-not-allowed font-medium text-left"
                                         >
-                                            Verify
+                                            {otpLoading ? 'Sending...' : resendTimer > 0 ? `Resend OTP in ${resendTimer}s` : 'Resend OTP'}
                                         </button>
                                     </div>
                                 )

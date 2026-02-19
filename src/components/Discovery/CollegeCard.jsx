@@ -65,7 +65,9 @@ const CollegeCard = ({ college, isSelected, onToggle }) => {
             {/* Image/Logo Area */}
             <div className="h-32 flex items-center justify-center relative overflow-hidden bg-white"
                 style={{
-                    background: showLogo ? '#ffffff' : `linear-gradient(135deg, ${getGradient(college.name)[0]}, ${getGradient(college.name)[1]})`
+                    background: showLogo
+                        ? (college.logoDarkBg ? 'linear-gradient(135deg, #1e293b, #334155)' : '#ffffff')
+                        : `linear-gradient(135deg, ${getGradient(college.name)[0]}, ${getGradient(college.name)[1]})`
                 }}>
 
                 {showLogo ? (
@@ -139,7 +141,7 @@ const CollegeCard = ({ college, isSelected, onToggle }) => {
                     </div>
                     <div className="flex items-center justify-between text-xs">
                         <span className="text-slate-500">Fees</span>
-                        <span className="font-bold text-slate-700">{college.fees.split(' ')[0]}</span>
+                        <span className="font-bold text-slate-700">{college.fees.split(' ').slice(0, 2).join(' ')}</span>
                     </div>
                 </div>
 

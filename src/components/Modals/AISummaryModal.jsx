@@ -40,7 +40,7 @@ const AISummaryModal = ({ isOpen, onClose, colleges }) => {
                             {/* College Header Card */}
                             <div className="p-3.5 sm:p-6 bg-gradient-to-br from-white to-slate-50 border-b border-slate-100 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 sm:gap-4">
                                 <div className="flex items-center gap-2.5 sm:gap-4 min-w-0">
-                                    <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl shadow-md border border-slate-200 flex items-center justify-center overflow-hidden bg-slate-50 flex-shrink-0">
+                                    <div className={`w-10 h-10 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl shadow-md border border-slate-200 flex items-center justify-center overflow-hidden flex-shrink-0 ${college.logoDarkBg ? 'bg-slate-800' : 'bg-slate-50'}`}>
                                         {college.logo ? (
                                             <img
                                                 src={college.logo}
@@ -114,7 +114,7 @@ const AISummaryModal = ({ isOpen, onClose, colleges }) => {
                                 )}
                                 <div className="p-2.5 sm:p-4 flex flex-col items-center text-center">
                                     <span className="text-[9px] sm:text-xs text-slate-500 uppercase font-semibold mb-0.5 sm:mb-1">Fees</span>
-                                    <span className="text-sm sm:text-lg font-bold text-slate-800">{college.fees.split(' ')[0]}</span>
+                                    <span className="text-sm sm:text-lg font-bold text-slate-800">{college.fees.split(' ').slice(0, 2).join(' ')}</span>
                                 </div>
                                 {college.placementPercent && (
                                     <div className="p-2.5 sm:p-4 flex flex-col items-center text-center">
