@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LandingPage from './components/Landing/LandingPage';
 import MasterForm from './components/Form/MasterForm';
 import DiscoveryPage from './components/Discovery/DiscoveryPage';
@@ -6,10 +6,34 @@ import AISummaryModal from './components/Modals/AISummaryModal';
 import CheckoutPage from './components/Checkout/CheckoutPage';
 import StepIndicator from './components/Shared/StepIndicator';
 
+const STORAGE_KEYS = {
+    currentPage: 'naviksha_currentPage',
+    selectedColleges: 'naviksha_selectedColleges',
+};
+
 function UserFlow() {
-    const [currentPage, setCurrentPage] = useState('landing'); // 'landing' | 'form' | 'discovery' | 'checkout' | 'success'
-    const [selectedColleges, setSelectedColleges] = useState([]);
+    const [currentPage, setCurrentPage] = useState(() => {
+        try {
+            return sessionStorage.getItem(STORAGE_KEYS.currentPage) || 'landing';
+        } catch { return 'landing'; }
+    });
+    const [selectedColleges, setSelectedColleges] = useState(() => {
+        try {
+            const stored = sessionStorage.getItem(STORAGE_KEYS.selectedColleges);
+            return stored ? JSON.parse(stored) : [];
+        } catch { return []; }
+    });
     const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+
+    // Persist currentPage to sessionStorage
+    useEffect(() => {
+        try { sessionStorage.setItem(STORAGE_KEYS.currentPage, currentPage); } catch { }
+    }, [currentPage]);
+
+    // Persist selectedColleges to sessionStorage
+    useEffect(() => {
+        try { sessionStorage.setItem(STORAGE_KEYS.selectedColleges, JSON.stringify(selectedColleges)); } catch { }
+    }, [selectedColleges]);
 
     // Map currentPage to step number
     const stepMap = { form: 1, discovery: 2, checkout: 3, success: 4 };

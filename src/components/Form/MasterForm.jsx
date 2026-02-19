@@ -1,7 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronRight, Check, AlertCircle, Sparkles, Target, BookOpen, X } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+
+const STORAGE_KEYS = {
+    formData: 'naviksha_formData',
+    notAppeared: 'naviksha_notAppeared',
+};
+
+const DEFAULT_FORM_DATA = {
+    studentName: '',
+    parentName: '',
+    contact: '',
+    jeePercentile: '',
+    bitsatScore: '',
+    comedkRank: '',
+    kcetRank: '',
+    mhtcetPercentile: '',
+    viteeeRank: '',
+    srmjeeRank: '',
+    wbjeeRank: '',
+    eapcetRank: '',
+    board: '',
+    homeState: '',
+    marks: {
+        physics: '',
+        chemistry: '',
+        math: '',
+        computerScience: ''
+    },
+    olympiad: {
+        physics: '',
+        math: '',
+        chemistry: ''
+    }
+};
+
 
 const INDIAN_STATES = [
     'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
@@ -47,36 +81,30 @@ const InputField = ({ label, error, ...props }) => (
 );
 
 const MasterForm = ({ onSubmit }) => {
-    const [formData, setFormData] = useState({
-        studentName: '',
-        parentName: '',
-        contact: '',
-        jeePercentile: '',
-        bitsatScore: '',
-        comedkRank: '',
-        kcetRank: '',
-        mhtcetPercentile: '',
-        viteeeRank: '',
-        srmjeeRank: '',
-        wbjeeRank: '',
-        eapcetRank: '',
-        board: '',
-        homeState: '',
-        marks: {
-            physics: '',
-            chemistry: '',
-            math: '',
-            computerScience: ''
-        },
-        olympiad: {
-            physics: '',
-            math: '',
-            chemistry: ''
-        }
+    const [formData, setFormData] = useState(() => {
+        try {
+            const stored = sessionStorage.getItem(STORAGE_KEYS.formData);
+            return stored ? { ...DEFAULT_FORM_DATA, ...JSON.parse(stored) } : DEFAULT_FORM_DATA;
+        } catch { return DEFAULT_FORM_DATA; }
     });
 
     // Track which exams the user has NOT appeared for
-    const [notAppeared, setNotAppeared] = useState({});
+    const [notAppeared, setNotAppeared] = useState(() => {
+        try {
+            const stored = sessionStorage.getItem(STORAGE_KEYS.notAppeared);
+            return stored ? JSON.parse(stored) : {};
+        } catch { return {}; }
+    });
+
+    // Persist formData to sessionStorage
+    useEffect(() => {
+        try { sessionStorage.setItem(STORAGE_KEYS.formData, JSON.stringify(formData)); } catch { }
+    }, [formData]);
+
+    // Persist notAppeared to sessionStorage
+    useEffect(() => {
+        try { sessionStorage.setItem(STORAGE_KEYS.notAppeared, JSON.stringify(notAppeared)); } catch { }
+    }, [notAppeared]);
 
     const toggleNotAppeared = (key) => {
         setNotAppeared(prev => {
