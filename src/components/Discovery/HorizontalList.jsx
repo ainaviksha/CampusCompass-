@@ -3,7 +3,7 @@ import { ChevronRight } from 'lucide-react';
 import CollegeCard from './CollegeCard';
 import { clsx } from 'clsx';
 
-const HorizontalList = ({ title, colleges, selectedColleges, onToggle }) => {
+const HorizontalList = ({ title, colleges, selectedColleges, onToggle, appliedCollegeIds = [] }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
@@ -37,6 +37,7 @@ const HorizontalList = ({ title, colleges, selectedColleges, onToggle }) => {
                         <CollegeCard
                             college={college}
                             isSelected={selectedColleges.some(c => c.id === college.id)}
+                            isApplied={appliedCollegeIds.includes(college.id)}
                             onToggle={onToggle}
                         />
                     </div>

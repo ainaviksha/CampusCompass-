@@ -1,15 +1,17 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Sparkles, ShoppingCart, Info, Search, SlidersHorizontal, X, Building2, GraduationCap, Award, Home, ArrowLeft } from 'lucide-react';
 import HorizontalList from './HorizontalList';
 import useColleges from '../../hooks/useColleges';
 import { getRecommendedColleges } from '../../utils/recommend';
+import studentApi from '../../utils/studentApi';
+import { isStudentLoggedIn } from '../../utils/studentAuth';
 import { clsx } from 'clsx';
 
 const STORAGE_KEYS = {
     formData: 'naviksha_formData',
 };
 
-const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpenCheckout, onBackToForm }) => {
+const DiscoveryPage = ({ selectedColleges, appliedCollegeIds = [], onToggleCollege, onOpenSummary, onOpenCheckout, onBackToForm }) => {
     const { colleges: COLLEGE_DATA, loading, error } = useColleges();
 
     // Derived Constants
@@ -302,6 +304,7 @@ const DiscoveryPage = ({ selectedColleges, onToggleCollege, onOpenSummary, onOpe
                                     colleges={colleges}
                                     selectedColleges={selectedColleges}
                                     onToggle={onToggleCollege}
+                                    appliedCollegeIds={appliedCollegeIds}
                                 />
                             </section>
                         )

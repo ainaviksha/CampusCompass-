@@ -208,7 +208,7 @@ const LandingPage = ({ onGetStarted }) => {
                             </p>
 
                             {/* CTA Group */}
-                            <div className="flex flex-col sm:flex-row items-center md:items-start gap-3 sm:gap-4 mb-8 sm:mb-10 animate-[fadeInUp_1.2s_ease]">
+                            <div className="flex flex-col sm:flex-row items-center md:items-start gap-3 sm:gap-4 mb-4 sm:mb-6 animate-[fadeInUp_1.2s_ease]">
                                 <button
                                     onClick={onGetStarted}
                                     className="group w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-2xl shadow-xl shadow-blue-200/60 transition-all active:scale-[0.97] flex items-center justify-center gap-2 text-base sm:text-lg hover:shadow-2xl hover:shadow-blue-300/50"
@@ -216,10 +216,16 @@ const LandingPage = ({ onGetStarted }) => {
                                     Start Your Application
                                     <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                                 </button>
-                                <span className="text-xs sm:text-sm text-slate-400 flex items-center gap-1.5">
-                                    <CheckCircle size={14} className="text-green-500" />
-                                    2 min • No login required
-                                </span>
+                                <p className="mt-3 sm:mt-4 text-[11px] sm:text-xs text-slate-400 flex items-center justify-center gap-1.5">
+                                    <CheckCircle size={12} className="text-green-500" />
+                                    Takes 2 minutes
+                                </p>
+                            </div>
+
+                            <div className="mb-8 sm:mb-10 text-left animate-[fadeInUp_1.3s_ease]">
+                                <a href="/login" className="inline-block text-sm text-slate-500 hover:text-slate-800 transition-colors">
+                                    Already applied? <span className="font-bold text-blue-600 underline decoration-blue-200 underline-offset-4 hover:decoration-blue-600">Login here</span>
+                                </a>
                             </div>
 
                             {/* Stats Row */}
@@ -499,15 +505,15 @@ const LandingPage = ({ onGetStarted }) => {
                     <p className="text-sm sm:text-lg text-slate-500 mb-6 sm:mb-8 max-w-md mx-auto">Join thousands of students who simplified their admission journey with Applichoice.</p>
                     <button
                         onClick={onGetStarted}
-                        className="group px-6 sm:px-10 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-2xl shadow-xl shadow-blue-200/50 transition-all active:scale-[0.97] flex items-center justify-center gap-2 mx-auto text-base sm:text-lg hover:shadow-2xl"
+                        className="group px-6 sm:px-10 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-2xl shadow-xl shadow-blue-200/50 transition-all active:scale-[0.97] flex items-center justify-center gap-2 mx-auto text-base sm:text-lg hover:shadow-2xl mb-4"
                     >
                         Start Now
                         <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                     </button>
-                    <p className="mt-3 sm:mt-4 text-[11px] sm:text-xs text-slate-400 flex items-center justify-center gap-1.5">
-                        <CheckCircle size={12} className="text-green-500" />
-                        No login required • Takes 2 minutes
-                    </p>
+
+                    <a href="/login" className="block text-sm text-slate-500 hover:text-slate-800 transition-colors">
+                        Already applied? <span className="font-bold text-blue-600 underline decoration-blue-200 underline-offset-4 hover:decoration-blue-600">Login here</span>
+                    </a>
                 </div>
             </section>
 

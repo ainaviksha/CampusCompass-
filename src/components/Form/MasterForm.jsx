@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, Check, AlertCircle, Sparkles, Target, BookOpen, X } from 'lucide-react';
+import { ChevronRight, Check, AlertCircle, Sparkles, Target, BookOpen, X, Loader2 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { saveStudentAuth } from '../../utils/studentAuth';
 
 const STORAGE_KEYS = {
     formData: 'naviksha_formData',
@@ -220,12 +221,57 @@ const MasterForm = ({ onSubmit }) => {
         }
     };
 
-    const handleSubmit = () => {
-        if (validate()) {
-            if (!otpVerified) {
-                setErrors(prev => ({ ...prev, otp: "Please verify contact number" }));
-                return;
+    const [submitting, setSubmitting] = useState(false);
+
+    const handleSubmit = async () => {
+        if (!validate()) return;
+        if (!otpVerified) {
+            setErrors(prev => ({ ...prev, otp: "Please verify contact number" }));
+            return;
+        }
+
+        setSubmitting(true);
+        try {
+            // Transform formData to match backend StudentOnboardRequest schema
+            const onboardPayload = {
+                phone: formData.contact,
+                studentName: formData.studentName,
+                parentName: formData.parentName || undefined,
+                homeState: formData.homeState || undefined,
+                board: formData.board || undefined,
+                marks: formData.marks,
+                examScores: {
+                    jeePercentile: formData.jeePercentile || undefined,
+                    bitsatScore: formData.bitsatScore || undefined,
+                    comedkRank: formData.comedkRank || undefined,
+                    viteeeRank: formData.viteeeRank || undefined,
+                    kcetRank: formData.kcetRank || undefined,
+                    mhtcetPercentile: formData.mhtcetPercentile || undefined,
+                    eapcetRank: formData.eapcetRank || undefined,
+                    srmjeeRank: formData.srmjeeRank || undefined,
+                    wbjeeRank: formData.wbjeeRank || undefined,
+                },
+                olympiad: formData.olympiad,
+            };
+
+            const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+            const res = await fetch(`${API_BASE}/students/onboard`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(onboardPayload),
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                if (data.token) {
+                    saveStudentAuth(data.token, formData.contact);
+                }
             }
+            // Proceed to discovery even if onboard call fails — data is in sessionStorage
+        } catch (err) {
+            console.warn('Student onboard API call failed:', err.message);
+        } finally {
+            setSubmitting(false);
             onSubmit(formData);
         }
     };
@@ -378,15 +424,15 @@ const MasterForm = ({ onSubmit }) => {
                                         className={twMerge(
                                             "text-[10px] font-medium px-2 py-0.5 rounded-full transition-colors",
                                             notAppeared[exam.key]
-                                                ? "bg-amber-100 text-amber-700 hover:bg-amber-200"
-                                                : "bg-slate-100 text-slate-500 hover:bg-slate-200"
+                                                ? "bg-slate-200 text-slate-700 hover:bg-slate-300"
+                                                : "bg-amber-50 text-amber-600 hover:bg-amber-100 border border-amber-200"
                                         )}
                                     >
-                                        {notAppeared[exam.key] ? "Didn't appear" : "Skip"}
+                                        {notAppeared[exam.key] ? "Update" : "Didn't appear"}
                                     </button>
                                 </div>
                                 {notAppeared[exam.key] ? (
-                                    <div className="text-[11px] text-slate-400 italic py-1.5">Not appeared — skipped</div>
+                                    <div className="text-[11px] text-slate-400 italic py-1.5">Didn't appear</div>
                                 ) : (
                                     <input
                                         type="number"
@@ -509,10 +555,20 @@ const MasterForm = ({ onSubmit }) => {
                 <div className="pt-3">
                     <button
                         onClick={handleSubmit}
-                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-sm py-3 rounded-lg shadow-md shadow-blue-200 transition-all active:scale-[0.99] flex items-center justify-center gap-2 group"
+                        disabled={submitting}
+                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:from-slate-300 disabled:to-slate-400 text-white font-semibold text-sm py-3 rounded-lg shadow-md shadow-blue-200 transition-all active:scale-[0.99] flex items-center justify-center gap-2 group"
                     >
-                        <span>Continue to College Selection</span>
-                        <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                        {submitting ? (
+                            <>
+                                <Loader2 size={16} className="animate-spin" />
+                                <span>Saving your profile...</span>
+                            </>
+                        ) : (
+                            <>
+                                <span>Continue to College Selection</span>
+                                <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                            </>
+                        )}
                     </button>
                     <p className="text-center text-[11px] text-slate-400 mt-3 flex items-center justify-center gap-1">
                         <Check size={10} /> Your data is 100% secure and encrypted
