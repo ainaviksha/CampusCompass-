@@ -34,25 +34,50 @@ const getGradient = (name) => {
     return GRADIENTS[Math.abs(hash) % GRADIENTS.length];
 };
 
-const CollegeCard = ({ college, isSelected, onToggle }) => {
+const CollegeCard = ({ college, isSelected, isApplied, onToggle }) => {
     const [imgError, setImgError] = useState(false);
     const showLogo = college.logo && !imgError;
 
+    // Compute consistent gradient based on string length to keep it feeling random but stable
+    const gradientIndex = college.name.length % GRADIENTS.length;
+    const [fromColor, toColor] = GRADIENTS[gradientIndex];
+
+    const handleClick = () => {
+        if (!isApplied) {
+            onToggle(college);
+        }
+    };
+
     return (
         <div
-            onClick={() => onToggle(college)}
+            onClick={handleClick}
             className={clsx(
-                "flex-shrink-0 w-56 h-auto rounded-2xl cursor-pointer transition-all duration-300 relative group border-2 flex flex-col overflow-hidden select-none",
-                isSelected
-                    ? "border-blue-500 bg-blue-50 shadow-xl shadow-blue-500/10 scale-105"
-                    : "border-transparent bg-white shadow-md hover:shadow-xl hover:-translate-y-1"
+                "flex-shrink-0 w-56 h-auto rounded-2xl transition-all duration-300 relative group border-2 flex flex-col overflow-hidden select-none",
+                isApplied
+                    ? "border-slate-200 bg-white opacity-80 cursor-not-allowed"
+                    : isSelected
+                        ? "border-blue-500 bg-blue-50 shadow-xl shadow-blue-500/10 scale-105 cursor-pointer"
+                        : "border-transparent bg-white shadow-md hover:shadow-xl hover:-translate-y-1 cursor-pointer"
             )}
         >
-            {isSelected && (
-                <div className="absolute top-3 right-3 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center shadow-lg z-10 animate-in zoom-in duration-200">
-                    <Check size={14} className="text-white" strokeWidth={3} />
-                </div>
-            )}
+            {/* Selection/Applied Indicator */}
+            <div className="absolute top-3 right-3 z-20 flex gap-2">
+                {isApplied ? (
+                    <div className="bg-slate-500 text-white rounded-full p-1 shadow-sm flex items-center gap-1 px-2.5">
+                        <Check size={14} className="stroke-[3]" />
+                        <span className="text-[10px] font-bold">Applied</span>
+                    </div>
+                ) : (
+                    <div className={clsx(
+                        "w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm border",
+                        isSelected
+                            ? "bg-blue-600 border-blue-600 text-white scale-110"
+                            : "bg-white/90 backdrop-blur border-slate-200 text-slate-300 group-hover:border-blue-300 group-hover:text-blue-200"
+                    )}>
+                        <Check size={16} className={clsx("transition-transform", isSelected ? "scale-100" : "scale-75")} />
+                    </div>
+                )}
+            </div>
 
             {/* NIRF Rank Badge */}
             {college.nirfRank && (

@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { GraduationCap, CreditCard, ShieldCheck, Check, ArrowLeft, Sparkles } from 'lucide-react';
+import { GraduationCap, CreditCard, ShieldCheck, Check, ArrowLeft, Sparkles, Loader2 } from 'lucide-react';
+import studentApi from '../../utils/studentApi';
+import { getStudentToken } from '../../utils/studentAuth';
 
 const CheckoutPage = ({ colleges, onBack, onPaymentComplete }) => {
     const [isProcessing, setIsProcessing] = useState(false);
+    const [paymentError, setPaymentError] = useState(null);
 
     const APP_FEE = 500;
     const totalFee = colleges.length * APP_FEE;
@@ -10,12 +13,48 @@ const CheckoutPage = ({ colleges, onBack, onPaymentComplete }) => {
     const discountAmount = Math.round(totalFee * discount / 100);
     const finalAmount = totalFee - discountAmount;
 
-    const handlePayment = () => {
+    const handlePayment = async () => {
         setIsProcessing(true);
-        setTimeout(() => {
+        setPaymentError(null);
+
+        try {
+            // Build the application payload
+            const payload = {
+                colleges: colleges.map(c => ({
+                    collegeId: c.id,
+                    name: c.name,
+                    city: c.city || null,
+                    status: 'submitted',
+                })),
+                pricing: {
+                    subtotal: totalFee,
+                    discountPercent: discount,
+                    discountAmount: discountAmount,
+                    finalAmount: finalAmount,
+                },
+            };
+
+            // Create application record in DB
+            const res = await studentApi.post('/students/applications', payload);
+
+            if (res.data?.success) {
+                // TODO: Integrate real payment gateway (Razorpay) here.
+                // For now, mark payment as "paid" immediately after creating the application.
+                if (onPaymentComplete) onPaymentComplete();
+            } else {
+                setPaymentError('Failed to create application. Please try again.');
+            }
+        } catch (err) {
+            console.error('Payment error:', err);
+            const detail = err.response?.data?.detail;
+            if (err.response?.status === 401) {
+                setPaymentError('Session expired. Please go back and re-submit the form.');
+            } else {
+                setPaymentError(detail || 'Something went wrong. Please try again.');
+            }
+        } finally {
             setIsProcessing(false);
-            if (onPaymentComplete) onPaymentComplete();
-        }, 2000);
+        }
     };
 
     return (
@@ -76,6 +115,13 @@ const CheckoutPage = ({ colleges, onBack, onPaymentComplete }) => {
                     </div>
                 </div>
 
+                {paymentError && (
+                    <div className="mb-4 sm:mb-5 p-3 sm:p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-2.5">
+                        <AlertCircle size={16} className="text-red-600 flex-shrink-0 mt-0.5" />
+                        <p className="text-xs sm:text-sm text-red-600 font-medium">{paymentError}</p>
+                    </div>
+                )}
+
                 {/* Payment Button */}
                 <button
                     onClick={handlePayment}
@@ -83,7 +129,10 @@ const CheckoutPage = ({ colleges, onBack, onPaymentComplete }) => {
                     className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:from-slate-300 disabled:to-slate-400 text-white text-sm font-semibold py-3 rounded-lg shadow-md shadow-blue-200 transition-all active:scale-[0.99] flex items-center justify-center gap-2"
                 >
                     {isProcessing ? (
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <div className="flex flex-col items-center">
+                            <Loader2 size={18} className="animate-spin mb-1" />
+                            <span className="text-xs">Processing application...</span>
+                        </div>
                     ) : (
                         <>
                             <CreditCard size={18} />
