@@ -21,7 +21,22 @@ const StudentLogin = () => {
         setLoading(true);
 
         try {
-            // Using the new dev-login endpoint that bypasses OTP
+            // First check if OTP is globally completely disabled by admins
+            const apiRes = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/settings/otp`);
+            const isOtpBypassed = !apiRes.data.is_otp_enabled;
+
+            // If bypassed, use the dev-login endpoint instantly. If not, use standard OTP verify flow (or redirect appropriately).
+            // Currently, this handles pure dev-login style. If OTP is enabled, we'd normally trigger an OTP request here.
+
+            if (!isOtpBypassed) {
+                // If OTP is strictly enabled, the pure "Login" page needs actual OTP verification
+                // As a stop-gap for this specific implementation, we will alert the user if they try to auto-login.
+                setError("OTP is strictly enforced. Please login via the main application page.");
+                setLoading(false);
+                return;
+            }
+
+            // Using the dev-login endpoint that bypasses OTP
             const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/students/dev-login`, {
                 phone: phone
             });

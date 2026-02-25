@@ -126,9 +126,28 @@ const MasterForm = ({ onSubmit }) => {
     const [otpLoading, setOtpLoading] = useState(false);
     const [verifyLoading, setVerifyLoading] = useState(false);
     const [resendTimer, setResendTimer] = useState(0);
+    const [isOtpGloballyEnabled, setIsOtpGloballyEnabled] = useState(true);
     const timerRef = React.useRef(null);
 
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+    // Fetch Global OTP Settings on Mount
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const res = await fetch(`${API_URL}/settings/otp`);
+                const data = await res.json();
+                setIsOtpGloballyEnabled(data.is_otp_enabled);
+                // If disabled, automatically mark OTP as verified to unlock the UI
+                if (!data.is_otp_enabled) {
+                    setOtpVerified(true);
+                }
+            } catch (err) {
+                console.error("Failed to fetch OTP settings", err);
+            }
+        };
+        fetchSettings();
+    }, [API_URL]);
 
     // Start 30-second resend countdown
     const startResendTimer = () => {
@@ -225,7 +244,7 @@ const MasterForm = ({ onSubmit }) => {
 
     const handleSubmit = async () => {
         if (!validate()) return;
-        if (!otpVerified) {
+        if (isOtpGloballyEnabled && !otpVerified) {
             setErrors(prev => ({ ...prev, otp: "Please verify contact number" }));
             return;
         }
@@ -331,60 +350,65 @@ const MasterForm = ({ onSubmit }) => {
                                     )}
                                     value={formData.contact}
                                     onChange={e => setFormData({ ...formData, contact: e.target.value })}
-                                    disabled={otpVerified}
+                                    disabled={isOtpGloballyEnabled && otpVerified}
                                 />
-                                {otpVerified && <Check size={16} className="absolute right-2.5 top-2.5 text-green-500" />}
+                                {isOtpGloballyEnabled && otpVerified && <Check size={16} className="absolute right-2.5 top-2.5 text-green-500" />}
                             </div>
 
-                            {!otpVerified ? (
-                                !otpSent ? (
-                                    <button
-                                        onClick={handleSendOTP}
-                                        disabled={otpLoading}
-                                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors whitespace-nowrap flex items-center gap-1.5"
-                                    >
-                                        {otpLoading ? (
-                                            <><span className="inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span> Sending...</>
-                                        ) : (
-                                            'Send OTP'
-                                        )}
-                                    </button>
-                                ) : (
-                                    <div className="flex flex-col gap-2 animate-in slide-in-from-right fade-in duration-300 w-full sm:w-auto">
-                                        <div className="flex gap-2">
-                                            <input
-                                                type="text"
-                                                placeholder="Enter OTP"
-                                                className="w-24 px-2 py-2 rounded-lg border border-slate-200 outline-none focus:border-blue-500 text-sm text-center tracking-widest"
-                                                maxLength={6}
-                                                value={otpInput}
-                                                onChange={e => setOtpInput(e.target.value.replace(/\D/g, ''))}
-                                            />
+                            {isOtpGloballyEnabled && (
+                                !otpVerified ? (
+                                    !otpSent ? (
+                                        <button
+                                            type="button"
+                                            onClick={handleSendOTP}
+                                            disabled={otpLoading}
+                                            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors whitespace-nowrap flex items-center gap-1.5"
+                                        >
+                                            {otpLoading ? (
+                                                <><span className="inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span> Sending...</>
+                                            ) : (
+                                                'Send OTP'
+                                            )}
+                                        </button>
+                                    ) : (
+                                        <div className="flex flex-col gap-2 animate-in slide-in-from-right fade-in duration-300 w-full sm:w-auto">
+                                            <div className="flex gap-2">
+                                                <input
+                                                    type="text"
+                                                    placeholder="Enter OTP"
+                                                    className="w-24 px-2 py-2 rounded-lg border border-slate-200 outline-none focus:border-blue-500 text-sm text-center tracking-widest"
+                                                    maxLength={6}
+                                                    value={otpInput}
+                                                    onChange={e => setOtpInput(e.target.value.replace(/\D/g, ''))}
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={handleVerifyOTP}
+                                                    disabled={verifyLoading}
+                                                    className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors flex items-center gap-1.5"
+                                                >
+                                                    {verifyLoading ? (
+                                                        <><span className="inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span> Verifying</>
+                                                    ) : (
+                                                        'Verify'
+                                                    )}
+                                                </button>
+                                            </div>
                                             <button
-                                                onClick={handleVerifyOTP}
-                                                disabled={verifyLoading}
-                                                className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors flex items-center gap-1.5"
+                                                type="button"
+                                                onClick={handleSendOTP}
+                                                disabled={resendTimer > 0 || otpLoading}
+                                                className="text-[11px] text-blue-600 hover:text-blue-700 disabled:text-slate-400 disabled:cursor-not-allowed font-medium text-left"
                                             >
-                                                {verifyLoading ? (
-                                                    <><span className="inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span> Verifying</>
-                                                ) : (
-                                                    'Verify'
-                                                )}
+                                                {otpLoading ? 'Sending...' : resendTimer > 0 ? `Resend OTP in ${resendTimer}s` : 'Resend OTP'}
                                             </button>
                                         </div>
-                                        <button
-                                            onClick={handleSendOTP}
-                                            disabled={resendTimer > 0 || otpLoading}
-                                            className="text-[11px] text-blue-600 hover:text-blue-700 disabled:text-slate-400 disabled:cursor-not-allowed font-medium text-left"
-                                        >
-                                            {otpLoading ? 'Sending...' : resendTimer > 0 ? `Resend OTP in ${resendTimer}s` : 'Resend OTP'}
-                                        </button>
+                                    )
+                                ) : (
+                                    <div className="px-4 py-2 bg-green-50 text-green-700 text-sm font-semibold rounded-lg border border-green-200 flex items-center gap-1.5 whitespace-nowrap">
+                                        <Check size={18} /> Verified
                                     </div>
                                 )
-                            ) : (
-                                <div className="px-4 py-2 bg-green-50 text-green-700 text-sm font-semibold rounded-lg border border-green-200 flex items-center gap-1.5">
-                                    <Check size={18} /> Verified
-                                </div>
                             )}
                         </div>
                         {errors.otp && <p className="text-xs text-red-500 font-medium mt-1">{errors.otp}</p>}

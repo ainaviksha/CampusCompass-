@@ -44,16 +44,21 @@ async def onboard_student(request: StudentOnboardRequest):
     db = get_database()
     now = datetime.now(timezone.utc)
 
-    # Verify that this phone was recently OTP-verified
-    otp_session = await db.otp_sessions.find_one(
-        {"phone": request.phone, "verified": True},
-        sort=[("created_at", -1)],
-    )
-    if not otp_session:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Phone number not verified. Please complete OTP verification first.",
+    # Check if OTP is globally completely disabled by admins
+    config = await db.system_settings.find_one({"_id": "global_config"})
+    is_otp_enabled = config.get("is_otp_enabled", True) if config else True
+
+    # Verify that this phone was recently OTP-verified (if enabled)
+    if is_otp_enabled:
+        otp_session = await db.otp_sessions.find_one(
+            {"phone": request.phone, "verified": True},
+            sort=[("created_at", -1)],
         )
+        if not otp_session:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Phone number not verified. Please complete OTP verification first.",
+            )
 
     # Build the student document
     student_data = request.model_dump(exclude_none=True)
