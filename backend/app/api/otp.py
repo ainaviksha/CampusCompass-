@@ -78,6 +78,12 @@ async def send_otp(request: OTPSendRequest):
     db = get_database()
     phone = request.phone
 
+    # Check if OTP is globally completely disabled by admins
+    config = await db.system_settings.find_one({"_id": "global_config"})
+    is_otp_enabled = config.get("is_otp_enabled", True) if config else True
+    if not is_otp_enabled:
+        return {"success": True, "message": "OTP is globally disabled. Proceed to next step."}
+
     # Check API key is configured
     if not settings.TWOFACTOR_API_KEY:
         raise HTTPException(
@@ -134,10 +140,16 @@ async def send_otp(request: OTPSendRequest):
 
 @router.post("/verify", response_model=OTPVerifyResponse)
 async def verify_otp(request: OTPVerifyRequest):
-    """Verify an OTP entered by the user against 2Factor.in."""
+    """Verify matching OTP from the database."""
     db = get_database()
     phone = request.phone
     otp = request.otp
+
+    # Check if OTP is globally completely disabled by admins
+    config = await db.system_settings.find_one({"_id": "global_config"})
+    is_otp_enabled = config.get("is_otp_enabled", True) if config else True
+    if not is_otp_enabled:
+        return {"success": True, "verified": True, "message": "OTP is globally disabled. Successfully bypassed."}
 
     if not settings.TWOFACTOR_API_KEY:
         raise HTTPException(

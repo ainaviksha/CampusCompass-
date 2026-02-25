@@ -7,15 +7,26 @@ import React, { useState, useEffect } from 'react';
 import {
     User, Phone, MapPin, GraduationCap, FileText, CreditCard,
     ChevronRight, Sparkles, BookOpen, LogOut, Loader2, AlertCircle,
-    CheckCircle2, Clock, ArrowRight
+    CheckCircle2, Clock, ArrowRight, Edit3
 } from 'lucide-react';
 import studentApi from '../../utils/studentApi';
 import { getStudentPhone, clearStudentAuth } from '../../utils/studentAuth';
+import EditProfileModal from './EditProfileModal';
 
 const StudentDashboard = ({ onApplyMore, onLogout, applications }) => {
     const [student, setStudent] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+    const loadStudentProfile = async () => {
+        try {
+            const res = await studentApi.get('/students/me');
+            setStudent(res.data);
+        } catch (err) {
+            console.error('Refetch failed', err);
+        }
+    };
 
     useEffect(() => {
         let ignore = false;
@@ -146,13 +157,22 @@ const StudentDashboard = ({ onApplyMore, onLogout, applications }) => {
                             <Sparkles size={14} className="text-yellow-300" />
                             <span className="text-[10px] sm:text-xs font-semibold text-blue-100">Student Dashboard</span>
                         </div>
-                        <button
-                            onClick={handleLogout}
-                            className="flex items-center gap-1 text-[10px] sm:text-xs text-blue-200 hover:text-white transition-colors"
-                        >
-                            <LogOut size={12} />
-                            <span className="hidden sm:inline">Log out</span>
-                        </button>
+                        <div className="flex items-center gap-3">
+                            <button
+                                onClick={() => setIsEditModalOpen(true)}
+                                className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-[10px] sm:text-xs font-medium text-white transition-colors"
+                            >
+                                <Edit3 size={12} />
+                                <span className="hidden sm:inline">Edit Profile</span>
+                            </button>
+                            <button
+                                onClick={handleLogout}
+                                className="flex items-center gap-1 text-[10px] sm:text-xs text-blue-200 hover:text-white transition-colors ml-2"
+                            >
+                                <LogOut size={12} />
+                                <span className="hidden sm:inline">Log out</span>
+                            </button>
+                        </div>
                     </div>
 
                     <h1 className="text-lg sm:text-xl font-bold">
@@ -286,13 +306,17 @@ const StudentDashboard = ({ onApplyMore, onLogout, applications }) => {
                     </h2>
                     <div className="space-y-2">
                         {filledExams.length < 3 && (
-                            <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 flex items-center gap-3">
+                            <button
+                                onClick={() => setIsEditModalOpen(true)}
+                                className="w-full text-left bg-blue-50 hover:bg-blue-100 border border-blue-100 rounded-xl px-4 py-3 flex items-center gap-3 transition-colors group cursor-pointer"
+                            >
                                 <BookOpen size={16} className="text-blue-500 flex-shrink-0" />
-                                <div className="min-w-0">
+                                <div className="min-w-0 flex-1">
                                     <p className="text-xs font-semibold text-blue-800">Complete your exam profile</p>
                                     <p className="text-[10px] text-blue-600 mt-0.5">Adding more exam scores improves college recommendations</p>
                                 </div>
-                            </div>
+                                <ArrowRight size={14} className="text-blue-400 group-hover:text-blue-600 transition-colors" />
+                            </button>
                         )}
                         <button
                             onClick={onApplyMore}
@@ -304,6 +328,13 @@ const StudentDashboard = ({ onApplyMore, onLogout, applications }) => {
                     </div>
                 </section>
             </main>
+
+            <EditProfileModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                student={student}
+                onUpdate={loadStudentProfile}
+            />
         </div>
     );
 };
